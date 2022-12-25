@@ -1,0 +1,6 @@
+dependencies {
+    implementation "org.mariadb.jdbc:mariadb-java-client:${jdbcVersion}"
+}
+
+group 'de.prog3'
+version '1.0-SNAPSHOT'

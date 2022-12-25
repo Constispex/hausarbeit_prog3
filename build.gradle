@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.beryx.jlink' version '2.25.0'
+
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'java'
+    apply plugin: 'application'
+
+    group 'de.prog3'
+    version '1.0-SNAPSHOT'
+
+    sourceCompatibility = '15'
+    targetCompatibility = '15'
+
+    ext {
+        junitVersion = '5.8.1'
+        jerseyVersion = '3.0.3'
+        grizzlyVersion = '3.0.1'
+        restVersion = '3.0.0'
+        jaxbVersion = '3.0.1'
+        jdbcVersion = '2.1.2'
+    }
+
+    javafx {
+        version = '17.0.2'
+        modules = ['javafx.controls', 'javafx.fxml']
+    }
+
+    run {
+        standardInput = System.in
+        standardOutput = System.out
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}

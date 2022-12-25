@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="577.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/18"
+      fx:controller="de.prog3.client.overview.controller.OverViewController">
+    <children>
+        <MenuBar prefHeight="0.0" prefWidth="0.0" VBox.vgrow="NEVER">
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem id="advAccess" mnemonicParsing="false" text="advanced access"/>
+            </Menu>
+        </MenuBar>
+        <AnchorPane prefHeight="549.0" prefWidth="889.0" VBox.vgrow="ALWAYS">
+            <children>
+                <SplitPane dividerPositions="0.24430091185410338" prefHeight="551.0" prefWidth="880.0">
+                    <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="549.0" prefWidth="293.0">
+                            <children>
+                                <Button id="button_submit" layoutX="70.0" layoutY="509.0" mnemonicParsing="false"
+                                        onAction="#submit" text="Submit"/>
+                                <AnchorPane layoutX="12.0" layoutY="125.0" prefHeight="333.0" prefWidth="188.0"
+                                            style="-fx-border-color: black;">
+                                    <children>
+                                        <TextField fx:id="text_title" layoutX="10.666666984558105" layoutY="49.0"/>
+                                        <TextField fx:id="text_author" layoutX="10.0" layoutY="102.0"/>
+                                        <TextField fx:id="text_publisher" layoutX="10.666666984558105" layoutY="160.0"/>
+                                        <Label layoutX="15.0" layoutY="142.0" text="Verlag"/>
+                                        <Label layoutX="11.666666984558105" layoutY="200.0" text="Bewertung"/>
+                                        <Slider fx:id="slider_rating" blockIncrement="1.0" layoutX="10.666666984558105"
+                                                layoutY="225.0" majorTickUnit="1.0" max="5.0" min="1.0"
+                                                minorTickCount="0" showTickLabels="true" showTickMarks="true"
+                                                snapToTicks="true" value="1.0"/>
+                                        <TextField fx:id="text_subareas" layoutX="10.666666984558105" layoutY="292.0"/>
+                                        <Label layoutX="11.666666984558105" layoutY="274.0" text="Teilgebiete"/>
+                                        <Label alignment="CENTER" layoutX="67.0" prefHeight="27.0" prefWidth="53.0"
+                                               text="Filter" textAlignment="CENTER">
+                                            <font>
+                                                <Font name="System Bold" size="18.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label layoutX="11.0" layoutY="84.0" prefHeight="17.0" prefWidth="59.0"
+                                               text="Autor/-en"/>
+                                        <Label layoutX="15.0" layoutY="31.0" text="Titel"/>
+                                    </children>
+                                </AnchorPane>
+                                <MenuButton layoutX="43.0" layoutY="467.0" mnemonicParsing="false"
+                                            text="Sortieren nach">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" text="Titel"/>
+                                        <MenuItem mnemonicParsing="false" text="Autor"/>
+                                        <MenuItem mnemonicParsing="false" text="Verlag"/>
+                                        <MenuItem mnemonicParsing="false" text="Bewertung"/>
+                                    </items>
+                                </MenuButton>
+                                <AnchorPane layoutX="12.0" layoutY="14.0" prefHeight="111.0" prefWidth="188.0"
+                                            style="-fx-border-color: black;">
+                                    <children>
+                                        <CheckBox id="check_title" fx:id="check_title" layoutX="11.0" layoutY="38.0"
+                                                  mnemonicParsing="false" text="Titel">
+                                            <font>
+                                                <Font size="9.0"/>
+                                            </font>
+                                        </CheckBox>
+                                        <CheckBox fx:id="check_author" layoutX="58.0" layoutY="38.0"
+                                                  mnemonicParsing="false" text="Autor/-en">
+                                            <font>
+                                                <Font size="9.0"/>
+                                            </font>
+                                        </CheckBox>
+                                        <CheckBox fx:id="check_publisher" layoutX="11.0" layoutY="62.0"
+                                                  mnemonicParsing="false" text="Verlag">
+                                            <font>
+                                                <Font size="9.0"/>
+                                            </font>
+                                        </CheckBox>
+                                        <CheckBox fx:id="check_rating" layoutX="58.0" layoutY="62.0"
+                                                  mnemonicParsing="false" text="Bewertung">
+                                            <font>
+                                                <Font size="9.0"/>
+                                            </font>
+                                        </CheckBox>
+                                        <CheckBox fx:id="check_subareas" layoutX="123.0" layoutY="62.0"
+                                                  mnemonicParsing="false" text="Teilgebiete">
+                                            <font>
+                                                <Font size="9.0"/>
+                                            </font>
+                                        </CheckBox>
+                                        <Label alignment="CENTER" layoutX="6.0" prefHeight="27.0" prefWidth="171.0"
+                                               text="sichtbare Spalten" textAlignment="CENTER">
+                                            <font>
+                                                <Font name="System Bold" size="18.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="351.0" prefWidth="397.0">
+                            <children>
+                                <Label fx:id="text_result" alignment="TOP_LEFT" contentDisplay="TOP"
+                                       graphicTextGap="10.0" layoutX="1.0" layoutY="-1.0" mouseTransparent="true"
+                                       nodeOrientation="LEFT_TO_RIGHT" prefHeight="549.0" prefWidth="678.0"
+                                       scaleShape="false" textOverrun="WORD_ELLIPSIS" wrapText="true"/>
+                            </children>
+                        </AnchorPane>
+                    </items>
+                </SplitPane>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

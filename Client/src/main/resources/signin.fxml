@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18"
+      fx:controller="de.prog3.client.signin.controller.SignInController">
+    <children>
+        <AnchorPane layoutX="150.0" layoutY="100.0" prefHeight="200.0" prefWidth="299.0"
+                    style="-fx-border-color: black;">
+            <children>
+                <TextField fx:id="text_username" layoutX="77.0" layoutY="88.0" prefHeight="25.0" prefWidth="151.0"/>
+                <PasswordField fx:id="text_password" layoutX="77.0" layoutY="120.0"/>
+                <Button fx:id="button_submit" layoutX="121.0" layoutY="160.0" mnemonicParsing="false" onAction="#submit"
+                        text="Submit"/>
+                <Label layoutX="91.0" layoutY="14.0" text="Please sign in">
+                    <font>
+                        <Font size="20.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="label_error" alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="44.0"
+                       prefHeight="48.0" prefWidth="299.0" textFill="#b51212" wrapText="true"/>
+            </children>
+        </AnchorPane>
+    </children>
+</Pane>
