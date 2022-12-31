@@ -1,4 +1,4 @@
-package de.prog3.client.signin.application;
+package de.prog3.client.application;
 
 import de.prog3.common.User;
 import javafx.application.Application;
@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-public class SignInApplication extends Application {
+public class DbmsApplication extends Application {
     User current_user;
 
     public static void main(String[] args) {

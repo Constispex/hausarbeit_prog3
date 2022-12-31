@@ -23,7 +23,7 @@ tasks.withType(JavaCompile) {
 application {
     mainModule = 'de.prog3.client'
 
-    mainClass = "de.prog3.client.signin.application.SignInApplication"
+    mainClass = "de.prog3.client.application.DbmsApplication"
 }
 
 jar {

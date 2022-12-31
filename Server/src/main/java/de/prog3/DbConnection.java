@@ -1,10 +1,10 @@
-package de.prog3.client;
+package de.prog3;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Connection {
+public class DbConnection {
     public java.sql.Connection getConnection() {
         java.sql.Connection con = null;
         try {

@@ -7,7 +7,7 @@
 <Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity"
       prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18"
-      fx:controller="de.prog3.client.signin.controller.SignInController">
+      fx:controller="de.prog3.client.controller.SignInController">
     <children>
         <AnchorPane layoutX="150.0" layoutY="100.0" prefHeight="200.0" prefWidth="299.0"
                     style="-fx-border-color: black;">

@@ -1,4 +1,4 @@
-package de.prog3.client;
+package de.prog3.client.handler;
 
 import de.prog3.common.User;
 import jakarta.ws.rs.client.Client;
@@ -8,6 +8,10 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+/**
+ * Die Klasse übersetzt die Eingaben des Clients und macht sie für den Server
+ * verständlich.
+ */
 public class DbmsClient {
     private final Client client;
     private final String baseURI;
@@ -28,22 +32,23 @@ public class DbmsClient {
 
     public Response post(String uri, User user) {
         WebTarget target = getTarget("POST", uri);
-        String login = user.getName() + ":" + user.getPassword();
+        String login = user.getName() + ":" + user.getPassword(); // syntax = username:password
         Entity<String> entity = Entity.entity(login, MediaType.TEXT_PLAIN);
         Response response = target.request().post(entity);
 
-
-        if (status(response) == 201) {
-            String location = response.getLocation().toString();
-            System.out.println("Location: " + location);
+        if (status(response) == 200) { // response successful
+            //String location = response.getLocation().toString();
+            String s = response.readEntity(String.class);
+            System.out.println(s);
+            //System.out.println("Location: " + location);
         }
         return response;
     }
 
     public Response post(String uri, StringBuilder select, StringBuilder where) {
-        if (select.isEmpty()) select.append(" * ");
+        if (select.toString().equals("SELECT ")) select.append(" * ");
         WebTarget target = getTarget("POST", uri);
-        Entity<String> entity = Entity.entity("SELECT" + select + "FROM Informatik " + where, MediaType.TEXT_PLAIN);
+        Entity<String> entity = Entity.entity(select + "FROM Informatik " + where, MediaType.TEXT_PLAIN);
         Response response = target.request().post(entity);
 
         if (status(response) == 201) {
@@ -64,6 +69,4 @@ public class DbmsClient {
         System.out.printf("Status: %d %s%n", code, reason);
         return code;
     }
-
-
 }

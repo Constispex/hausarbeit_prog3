@@ -1,6 +1,6 @@
-package de.prog3.client.signin.controller;
+package de.prog3.client.controller;
 
-import de.prog3.client.DbmsClient;
+import de.prog3.client.handler.DbmsClient;
 import de.prog3.common.User;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
@@ -23,13 +23,12 @@ public class SignInController {
 
     @FXML
     public Label label_error;
-
     @FXML
     TextField text_password;
 
+    public static User currentUser;
+
     public void submit() {
-
-
         String username = this.text_username.getText();
         String password = this.text_password.getText();
 
@@ -38,7 +37,6 @@ public class SignInController {
             label_error.setText("please enter a name and a password");
             text_password.clear();
         } else {
-
             System.out.printf("Username: %s \t Password: %s%n", username, password);
             User u = new User(username, password, false);
             final String BASE_URI = "http://localhost:8080/rest";
@@ -53,14 +51,19 @@ public class SignInController {
                     text_password.clear();
 
                 }
-                case 201 -> // User exist
+                case 200 -> // User exist
                 {
                     label_error.setText("login successful");
                     Stage stage = (Stage) button_submit.getScene().getWindow();
                     stage.close();
 
+
+                    boolean isAdmin = response.readEntity(String.class).equals("true");
+
+                    currentUser = new User(username, password, isAdmin);
+
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/overview.fxml"));
-                    Scene secondScene = null;
+                    Scene secondScene;
                     try {
                         secondScene = new Scene(fxmlLoader.load());
                     } catch (IOException e) {

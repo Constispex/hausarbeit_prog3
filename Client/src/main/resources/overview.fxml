@@ -36,11 +36,27 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="577.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/18"
-      fx:controller="de.prog3.client.overview.controller.OverViewController">
+      fx:controller="de.prog3.client.controller.OverViewController">
     <children>
         <MenuBar prefHeight="0.0" prefWidth="0.0" VBox.vgrow="NEVER">
-            <Menu mnemonicParsing="false" text="Help">
-                <MenuItem id="advAccess" mnemonicParsing="false" text="advanced access"/>
+            <Menu mnemonicParsing="false" text="Sortieren nach">
+                <items>
+                    <MenuItem fx:id="menu_sortby_title" mnemonicParsing="false" onAction="#sortby_title" text="Titel"/>
+                    <MenuItem fx:id="menu_sortby_author" mnemonicParsing="false" onAction="#sortby_author"
+                              text="Autor"/>
+                    <MenuItem fx:id="menu_sortby_publisher" mnemonicParsing="false" onAction="#sortby_publisher"
+                              text="Verlag"/>
+                    <MenuItem fx:id="menu_sortby_rating" mnemonicParsing="false" onAction="#sortby_rating"
+                              text="Bewertung (absteigend)"/>
+                    <MenuItem fx:id="menu_sortby_subareas" mnemonicParsing="false" onAction="#sortby_subareas"
+                              text="Teilgebiete"/>
+                </items>
+            </Menu>
+            <Menu fx:id="menu_menu" mnemonicParsing="false" text="Menu">
+                <MenuItem id="advAccess" fx:id="menu_logoff" mnemonicParsing="false" onAction="#logOff"
+                          text="Abmelden"/>
+                <MenuItem id="advAccess" fx:id="menu_adminPage" mnemonicParsing="false" onAction="#AdminPage"
+                          text="Configure Database" visible="false"/>
             </Menu>
         </MenuBar>
         <AnchorPane prefHeight="549.0" prefWidth="889.0" VBox.vgrow="ALWAYS">
@@ -49,8 +65,6 @@
                     <items>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="549.0" prefWidth="293.0">
                             <children>
-                                <Button id="button_submit" layoutX="70.0" layoutY="509.0" mnemonicParsing="false"
-                                        onAction="#submit" text="Submit"/>
                                 <AnchorPane layoutX="12.0" layoutY="125.0" prefHeight="333.0" prefWidth="188.0"
                                             style="-fx-border-color: black;">
                                     <children>
@@ -58,11 +72,11 @@
                                         <TextField fx:id="text_author" layoutX="10.0" layoutY="102.0"/>
                                         <TextField fx:id="text_publisher" layoutX="10.666666984558105" layoutY="160.0"/>
                                         <Label layoutX="15.0" layoutY="142.0" text="Verlag"/>
-                                        <Label layoutX="11.666666984558105" layoutY="200.0" text="Bewertung"/>
+                                        <Label layoutX="11.666666984558105" layoutY="200.0"
+                                               text="Bewertung (0 = deactivated)"/>
                                         <Slider fx:id="slider_rating" blockIncrement="1.0" layoutX="10.666666984558105"
-                                                layoutY="225.0" majorTickUnit="1.0" max="5.0" min="1.0"
-                                                minorTickCount="0" showTickLabels="true" showTickMarks="true"
-                                                snapToTicks="true" value="1.0"/>
+                                                layoutY="225.0" majorTickUnit="1.0" max="5.0" minorTickCount="0"
+                                                showTickLabels="true" showTickMarks="true" snapToTicks="true"/>
                                         <TextField fx:id="text_subareas" layoutX="10.666666984558105" layoutY="292.0"/>
                                         <Label layoutX="11.666666984558105" layoutY="274.0" text="Teilgebiete"/>
                                         <Label alignment="CENTER" layoutX="67.0" prefHeight="27.0" prefWidth="53.0"
@@ -76,15 +90,6 @@
                                         <Label layoutX="15.0" layoutY="31.0" text="Titel"/>
                                     </children>
                                 </AnchorPane>
-                                <MenuButton layoutX="43.0" layoutY="467.0" mnemonicParsing="false"
-                                            text="Sortieren nach">
-                                    <items>
-                                        <MenuItem mnemonicParsing="false" text="Titel"/>
-                                        <MenuItem mnemonicParsing="false" text="Autor"/>
-                                        <MenuItem mnemonicParsing="false" text="Verlag"/>
-                                        <MenuItem mnemonicParsing="false" text="Bewertung"/>
-                                    </items>
-                                </MenuButton>
                                 <AnchorPane layoutX="12.0" layoutY="14.0" prefHeight="111.0" prefWidth="188.0"
                                             style="-fx-border-color: black;">
                                     <children>
@@ -126,6 +131,14 @@
                                         </Label>
                                     </children>
                                 </AnchorPane>
+                                <Button fx:id="button_submit" layoutX="79.0" layoutY="471.0" mnemonicParsing="false"
+                                        onAction="#submit" text="Submit"/>
+                                <Label fx:id="label_error" alignment="TOP_LEFT" layoutX="12.0" layoutY="496.0"
+                                       prefHeight="46.0" prefWidth="188.0" wrapText="true">
+                                    <font>
+                                        <Font size="10.0"/>
+                                    </font>
+                                </Label>
                             </children>
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="351.0" prefWidth="397.0">
