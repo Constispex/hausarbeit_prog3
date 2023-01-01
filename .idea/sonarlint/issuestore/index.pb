@@ -22,7 +22,5 @@ U
 %Common/src/main/java/module-info.java,e\f\ef5fddaf2c0c7f5e9a6a2308db88bcc023a44a2f
 m
 =Server/src/main/java/de/prog3/server/DataBaseApplication.java,c\9\c98decbb1b172998dac5fb897d0f9dc7308b0078
-B
-sql/Informatik.sql,6\4\644852eddbcb612d59ab5a15b6a0284d65ae7e1e
 ^
 .Server/src/main/java/de/prog3/server/Main.java,f\2\f2f4e8aa8971d21e592c1369318f0da220087f6b

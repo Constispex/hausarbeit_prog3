@@ -8,6 +8,8 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.logging.Logger;
+
 /**
  * Die Klasse übersetzt die Eingaben des Clients und macht sie für den Server
  * verständlich.
@@ -38,24 +40,30 @@ public class DbmsClient {
 
         if (status(response) == 200) { // response successful
             //String location = response.getLocation().toString();
-            String s = response.readEntity(String.class);
-            System.out.println(s);
+
             //System.out.println("Location: " + location);
         }
         return response;
     }
 
-    public Response post(String uri, StringBuilder select, StringBuilder where) {
-        if (select.toString().equals("SELECT ")) select.append(" * ");
-        WebTarget target = getTarget("POST", uri);
-        Entity<String> entity = Entity.entity(select + "FROM Informatik " + where, MediaType.TEXT_PLAIN);
-        Response response = target.request().post(entity);
+    public Response post(String uri, StringBuilder select, StringBuilder where, StringBuilder sortBy) {
+        Response response;
+        try {
+            if (select.toString().equals("SELECT ")) select.append(" * ");
+            if (sortBy == null) sortBy = new StringBuilder();
+            WebTarget target = getTarget("POST", uri);
+            Entity<String> entity = Entity.entity(select + " FROM Informatik " + where + sortBy, MediaType.TEXT_PLAIN);
+            response = target.request().post(entity);
 
-        if (status(response) == 201) {
-            String location = response.getLocation().toString();
-            System.out.println("Location: " + location);
+            if (status(response) == 201) {
+                String location = response.getLocation().toString();
+                System.out.println("Location: " + location);
+            }
+            return response;
+        } catch (NullPointerException e){
+            Logger.getLogger(e.getMessage());
+            return Response.status(100, "Bitte setzte erst den Filter, bevor du sortierst!").build();
         }
-        return response;
     }
 
     private WebTarget getTarget(String crud, String uri) {

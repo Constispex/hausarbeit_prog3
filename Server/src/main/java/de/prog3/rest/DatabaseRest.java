@@ -13,6 +13,7 @@ import jakarta.ws.rs.core.UriInfo;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,9 @@ public class DatabaseRest {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     public Response getSqlQuery(String res, @Context UriInfo uriInfo) {
-        System.out.println("Query: " + res);
+
+        System.out.printf("[%s]: Query: %s%n",
+                new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()) , res);
 
         try {
             Connection conn = new DbConnection().getConnection();
