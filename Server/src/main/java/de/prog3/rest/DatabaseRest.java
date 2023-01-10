@@ -37,9 +37,8 @@ public class DatabaseRest {
             Statement statement = conn.createStatement();
             statement.executeQuery(res);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getSQLState());
         }
         return Response.ok().build();
-
     }
 }
