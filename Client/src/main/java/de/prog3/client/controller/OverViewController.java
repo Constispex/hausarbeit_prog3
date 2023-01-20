@@ -6,13 +6,20 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.effect.ImageInput;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.InputStream;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class OverViewController {
     @FXML
@@ -46,12 +53,18 @@ public class OverViewController {
     @FXML
     public Button button_submit;
     final String BASE_URI = "http://localhost:8080/rest";
+    @FXML
+    public GridPane grid_resultTable;
+    @FXML
+    public TableView table_result;
+    @FXML
+    public ScrollPane pane_resultTable;
     DbmsClient dbmsClient = new DbmsClient(BASE_URI);
     private StringBuilder select;
     private StringBuilder where;
-    private StringBuilder sortBy;
+    private StringBuilder orderBy;
 
-    public void submit(ActionEvent actionEvent) {
+    public void submit() {
         where = new StringBuilder("WHERE ");
         select = new StringBuilder("SELECT ");
         String a = " AND ";
@@ -100,9 +113,13 @@ public class OverViewController {
 
         if (where.toString().equals("WHERE ")) where.replace(0, where.length(), "");
 
-        Response response = dbmsClient.post("/sqlquery", select, where, sortBy);
+        Response response = dbmsClient.post("/sqlquery", select, where, orderBy);
 
-        text_result.setText(select + " FROM Informatik " + where);
+        String table = response.readEntity(String.class);
+        setResultTable(table);
+
+       table = table.replace("//", "\n").replace("; ", "\t\t");
+       text_result.setText(table);
         label_error.setText(String.valueOf(response.getStatusInfo()));
 
     }
@@ -119,11 +136,11 @@ public class OverViewController {
         Stage stage = (Stage) button_submit.getScene().getWindow();
         stage.close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/signin.fxml"));
-        Scene logInScene;
+        Scene logInScene = null;
         try {
             logInScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
         }
         Stage logInWindow = new Stage();
         logInWindow.setScene(logInScene);
@@ -152,19 +169,63 @@ public class OverViewController {
         if (select == null) select = new StringBuilder("SELECT ");
         System.out.println(actionEvent.getTarget());
         String actionTarget = actionEvent.getTarget().toString();
-        sortBy = new StringBuilder(" SORT BY ");
+        orderBy = new StringBuilder(" ORDER BY ");
         for (String s: sorts
         ) {
             if (actionTarget.contains(s.toLowerCase())){
-                sortBy.append(s);
-                Response response = dbmsClient.post("/sqlquery", select, where, sortBy);
+                orderBy.append(s);
+                Response response = dbmsClient.post("/sqlquery", select, where, orderBy);
                 label_error.setText(String.valueOf(response.getStatusInfo()));
-                text_result.setText(select + " FROM Informatik " + where + sortBy);
+                String table = response.readEntity(String.class);
+                setResultTable(table);
+                System.out.println(table);
+                table = table.replace("//", "\n").replace("; ", "\t\t");
+                text_result.setText(table);
                 label_error.setText(response.getStatus() == 100 ?
                         response.getStatusInfo().getReasonPhrase() : String.valueOf(response.getStatusInfo()));
-                sortBy = new StringBuilder();
+                orderBy = new StringBuilder();
                 break;
             }
+        }
+    }
+
+    public void setResultTable(String result) {
+        grid_resultTable.setVisible(false);
+        String[] rows = result.split("//");
+        String[] cols = rows[0].split("; ");
+        System.out.println("Rows");
+        augabeArray(rows);
+        System.out.println("cols");
+        augabeArray(cols);
+        int anzahlZeilen = rows.length - 1;
+        int anzahlSpalten = cols.length;
+        grid_resultTable.setGridLinesVisible(true);
+
+        String[][] table = new String[anzahlZeilen][anzahlSpalten];
+        for (int i = 0; i < anzahlZeilen; i++) {
+            String[] currCols = rows[i].split("; ");
+            System.arraycopy(currCols, 0, table[i], 0, anzahlSpalten);
+        }
+
+        for (int i = 0; i < anzahlSpalten; i++) grid_resultTable.addRow(i);
+
+        for (int i = 0; i < anzahlZeilen; i++) {
+            grid_resultTable.addColumn(i);
+            String[] currRow = table[i];
+            for (int j = 0; j < anzahlSpalten; j++) {
+                Node n = new Label();
+                System.out.println("set Text to: " + currRow[j]);
+                n.setAccessibleText(currRow[j]);
+                n.setVisible(true);
+                grid_resultTable.add(n, j, i);
+            }
+        }
+    }
+
+    public void augabeArray(String[] arr){
+        for (String s: arr
+             ) {
+            System.out.println(s);
         }
     }
 }

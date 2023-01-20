@@ -1,25 +1,19 @@
 package de.prog3.rest;
 
 import de.prog3.DbConnection;
-import de.prog3.common.User;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Path("/sqlquery")
 public class DatabaseRest {
-    private final List<User> users = new ArrayList<>();
+    private HashMap<String, ResultSet> queries;
 
     public DatabaseRest() {
 
@@ -27,18 +21,39 @@ public class DatabaseRest {
 
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response getSqlQuery(String res, @Context UriInfo uriInfo) {
-
         System.out.printf("[%s]: Query: %s%n",
                 new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()) , res);
+            ResultSet rs = DbConnection.execute(res);
 
-        try {
-            Connection conn = new DbConnection().getConnection();
-            Statement statement = conn.createStatement();
-            statement.executeQuery(res);
-        } catch (SQLException e) {
-            System.err.println(e.getSQLState());
-        }
-        return Response.ok().build();
+       String result = DbConnection.rsToString(Objects.requireNonNull(rs), getColumns(res));
+        System.out.println("sendToClient: " + result);
+        return Response.ok(result).build();
     }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response postQuery(String query) {
+        ResultSet curr = queries.get(query);
+
+        String res = DbConnection.rsToString(curr, getColumns(query));
+
+        return Response.ok(res).build();
+    }
+
+    int getColumns(String sql){
+        if (sql.contains("SELECT  * FROM")) return 5;
+        Scanner scanner = new Scanner(sql.toUpperCase());
+        int columns=0;
+        scanner.next();
+        while (!scanner.hasNext("FROM")){
+            scanner.next();
+            columns++;
+        }
+        scanner.close();
+        return columns;
+    }
+
+
 }

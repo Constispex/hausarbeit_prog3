@@ -6,3 +6,4 @@ CREATE TABLE Persons
     Address   varchar(255),
     City      varchar(255)
 );
+CREATE DATABASE IF NOT EXISTS Informatik

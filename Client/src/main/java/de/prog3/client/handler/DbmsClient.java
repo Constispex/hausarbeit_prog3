@@ -49,16 +49,12 @@ public class DbmsClient {
     public Response post(String uri, StringBuilder select, StringBuilder where, StringBuilder sortBy) {
         Response response;
         try {
-            if (select.toString().equals("SELECT ")) select.append(" * ");
+            if (select.toString().equals("SELECT ")) select.append(" *");
             if (sortBy == null) sortBy = new StringBuilder();
             WebTarget target = getTarget("POST", uri);
-            Entity<String> entity = Entity.entity(select + " FROM Informatik " + where + sortBy, MediaType.TEXT_PLAIN);
+            Entity<String> entity = Entity.entity(select + " FROM Buecher " + where + sortBy, MediaType.TEXT_PLAIN);
             response = target.request().post(entity);
 
-            if (status(response) == 201) {
-                String location = response.getLocation().toString();
-                System.out.println("Location: " + location);
-            }
             return response;
         } catch (NullPointerException e){
             Logger.getLogger(e.getMessage());
