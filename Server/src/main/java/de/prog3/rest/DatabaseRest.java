@@ -29,6 +29,7 @@ public class DatabaseRest {
         System.out.printf("[%s]: Query: %s%n",
                 new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()), res);
         ResultSet rs = DbConnection.execute(res);
+        if (!res.contains("SELECT")) return Response.ok().build();
 
         String result = DbConnection.rsToString(Objects.requireNonNull(rs), getColumns(res));
         try {

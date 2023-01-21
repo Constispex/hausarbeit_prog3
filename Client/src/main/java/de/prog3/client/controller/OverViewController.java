@@ -1,10 +1,9 @@
 package de.prog3.client.controller;
 
 import de.prog3.client.handler.DbmsClient;
-import de.prog3.client.model.Buch;
+import de.prog3.client.model.Book;
 import jakarta.ws.rs.core.Response;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,8 +26,6 @@ public class OverViewController {
     @FXML
     public Slider slider_rating;
     @FXML
-    public MenuItem menu_adminPage;
-    @FXML
     public CheckBox check_subareas;
     @FXML
     public CheckBox check_title;
@@ -44,17 +41,24 @@ public class OverViewController {
     public MenuItem menu_logoff;
     @FXML
     public Button button_submit;
+    @FXML
+    public Button admin_edit;
+    @FXML
+    public Button admin_delete;
+    @FXML
+    public Button admin_add;
+    @FXML
+    public TableView<Book> table_result;
     private static final List<String> selectedCols = new ArrayList<>();
     final String BASE_URI = "http://localhost:8080/rest";
     private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
+
     private StringBuilder select;
     private StringBuilder where;
     private StringBuilder orderBy;
-    @FXML
-    public TableView<Buch> table_result;
 
-    private static Buch setBookData(String[] column, List<String> selectedCols) {
-        Buch b = new Buch();
+    private static Book setBookData(String[] column, List<String> selectedCols) {
+        Book b = new Book();
         for (int i = 0; i < selectedCols.size(); i++) {
             String col = selectedCols.get(i);
             switch (col) {
@@ -70,9 +74,9 @@ public class OverViewController {
         return b;
     }
 
-
-
-    public void AdminPage(ActionEvent actionEvent) {
+    @FXML
+    public void initialize() {
+        if (SignInController.currentUser.isAdmin()) admin_add.setDisable(false);
     }
 
     /**
@@ -93,11 +97,6 @@ public class OverViewController {
         logInWindow.setTitle("LogIn");
         logInWindow.show();
     }
-
-    public void setAdminPageButton(Event event) {
-        if (SignInController.currentUser.isAdmin()) menu_adminPage.setVisible(true);
-    }
-
     public void submit() {
         where = new StringBuilder("WHERE ");
         select = new StringBuilder("SELECT ");
@@ -207,11 +206,7 @@ public class OverViewController {
     public void setResultTable(String result) {
         String[] rows = result.split("// ");
         String[] cols = rows[0].split("; ");
-        System.out.println("Rows");
-        augabeArray(rows);
-        System.out.println("cols");
-        augabeArray(cols);
-        int anzahlZeilen = rows.length - 1;
+        int anzahlZeilen = rows.length;
         int anzahlSpalten = cols.length;
 
         table_result.getColumns().clear();
@@ -219,7 +214,7 @@ public class OverViewController {
 
         for (String col : selectedCols
         ) {
-            TableColumn<Buch, String> curr = new TableColumn<>(col);
+            TableColumn<Book, String> curr = new TableColumn<>(col);
             curr.setCellValueFactory(new PropertyValueFactory<>(col));
             table_result.getColumns().add(curr);
         }
@@ -233,7 +228,7 @@ public class OverViewController {
 
         for (String[] column : table
         ) {
-            Buch b = setBookData(column, selectedCols);
+            Book b = setBookData(column, selectedCols);
             table_result.getItems().add(b);
         }
     }
@@ -243,5 +238,65 @@ public class OverViewController {
         ) {
             System.out.println(s);
         }
+    }
+
+    public void editBook() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/editbook.fxml"));
+        Scene editBookScene = null;
+        try {
+            editBookScene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        Stage editBookStage = new Stage();
+        editBookStage.setUserData(getCurrBook());
+        editBookStage.setScene(editBookScene);
+        editBookStage.setTitle("Add Book");
+        editBookStage.show();
+
+    }
+
+    public void deleteBook() {
+        Book b = getCurrBook();
+        if (b != null) {
+            String sql = "DELETE FROM buecher WHERE Title = \"" + b.getTitle() + "\"";
+            Response response = dbmsClient.post("/sqlquery", sql);
+            label_error.setText(response.getStatusInfo().toString());
+            submit();
+        }
+        tableClicked();
+    }
+
+    public void tableClicked() {
+        boolean adminAccess = SignInController.currentUser.isAdmin();
+        Book b = getCurrBook();
+        if (b != null) {
+            if (adminAccess) {
+                admin_edit.setDisable(false);
+                admin_delete.setDisable(false);
+            }
+        } else {
+            admin_edit.setDisable(true);
+            admin_delete.setDisable(true);
+        }
+
+    }
+
+    public Book getCurrBook() {
+        return table_result.getSelectionModel().getSelectedItem();
+    }
+
+    public void addBook() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/addbook.fxml"));
+        Scene logInScene = null;
+        try {
+            logInScene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        Stage logInWindow = new Stage();
+        logInWindow.setScene(logInScene);
+        logInWindow.setTitle("Add Book");
+        logInWindow.show();
     }
 }

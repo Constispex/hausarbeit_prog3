@@ -1,6 +1,6 @@
 package de.prog3.client.model;
 
-public class Buch {
+public class Book {
 
     String title;
     String author;
@@ -8,7 +8,7 @@ public class Buch {
     String rating;
     String subareas;
 
-    public Buch(String title, String author, String publisher, String rating, String subareas) {
+    public Book(String title, String author, String publisher, String rating, String subareas) {
         this.title = title;
         this.author = author;
         this.publisher = publisher;
@@ -16,8 +16,20 @@ public class Buch {
         this.subareas = subareas;
     }
 
-    public Buch() {
+    public Book() {
 
+    }
+
+    public String toSqlQuery(Book b) {
+        return addQuotes(b.title) + ", " +
+                addQuotes(b.author) + ", " +
+                addQuotes(b.publisher) + ", " +
+                addQuotes(b.rating) + ", " +
+                addQuotes(b.subareas);
+    }
+
+    private String addQuotes(String s) {
+        return "'" + s + "'";
     }
 
     public String getTitle() {

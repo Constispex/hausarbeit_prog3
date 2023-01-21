@@ -31,6 +31,15 @@ public class DbmsClient {
         return target.request().post(entity);
     }
 
+    public Response post(String uri, String query) {
+        WebTarget target = getTarget("POST", uri);
+        Entity<String> entity = Entity.entity(query, MediaType.TEXT_PLAIN);
+        Response response = target.request().post(entity);
+        status(response);
+
+        return response;
+    }
+
     public Response post(String uri, StringBuilder select, StringBuilder where, StringBuilder sortBy) {
         Response response;
         try {
