@@ -1,5 +1,6 @@
 package de.prog3.server;
 
+import de.prog3.DbConnection;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.ServerConfiguration;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
@@ -28,9 +29,16 @@ public class Main {
         ServerConfiguration serverConfig = server.getServerConfiguration();
         serverConfig.addHttpHandler(handler, "/");
 
+        // set up Database
+        if (DbConnection.setUpDatabase()) {
+            System.out.println("Database set up completed");
+        } else {
+            System.err.println("Server shut down - Database set up failed");
+            server.shutdown();
+        }
         if (!server.isStarted()) server.start();
 
-        System.out.println("ENTER stoppt den Server");
+        System.out.println("Enter stops the server");
         System.in.read();
         server.shutdownNow();
 

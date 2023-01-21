@@ -14,5 +14,6 @@ module de.prog3.client {
     exports de.prog3.client.application;
     exports de.prog3.client.controller;
     exports de.prog3.client.handler;
+    exports de.prog3.client.model;
 
 }

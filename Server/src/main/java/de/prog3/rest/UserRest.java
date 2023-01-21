@@ -41,16 +41,4 @@ public class UserRest {
         }
         return Response.notAcceptable(null).build();
     }
-
-    /*@GET
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response isAdmin(String res, @Context UriInfo uriInfo){
-
-        for (User u: users
-             ) {
-            return u.isAdmin() ? Response.ok("admin").build() : Response.ok("user").build();
-        }
-        return Response.noContent().build();
-    }*/
 }

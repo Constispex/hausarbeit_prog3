@@ -1,25 +1,19 @@
 package de.prog3.client.controller;
 
 import de.prog3.client.handler.DbmsClient;
+import de.prog3.client.model.Buch;
 import jakarta.ws.rs.core.Response;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.effect.ImageInput;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class OverViewController {
     @FXML
@@ -32,8 +26,6 @@ public class OverViewController {
     public TextField text_subareas;
     @FXML
     public Slider slider_rating;
-    @FXML
-    public Label text_result;
     @FXML
     public MenuItem menu_adminPage;
     @FXML
@@ -52,40 +44,96 @@ public class OverViewController {
     public MenuItem menu_logoff;
     @FXML
     public Button button_submit;
+    private static final List<String> selectedCols = new ArrayList<>();
     final String BASE_URI = "http://localhost:8080/rest";
-    @FXML
-    public GridPane grid_resultTable;
-    @FXML
-    public TableView table_result;
-    @FXML
-    public ScrollPane pane_resultTable;
-    DbmsClient dbmsClient = new DbmsClient(BASE_URI);
+    private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
     private StringBuilder select;
     private StringBuilder where;
     private StringBuilder orderBy;
+    @FXML
+    public TableView<Buch> table_result;
+
+    private static Buch setBookData(String[] column, List<String> selectedCols) {
+        Buch b = new Buch();
+        for (int i = 0; i < selectedCols.size(); i++) {
+            String col = selectedCols.get(i);
+            switch (col) {
+                case "title" -> b.setTitle(column[i]);
+                case "author" -> b.setAuthor(column[i]);
+                case "publisher" -> b.setPublisher(column[i]);
+                case "rating" -> b.setRating(column[i]);
+                case "subareas" -> b.setSubareas(column[i]);
+                default -> System.err.println("no columns detected");
+            }
+        }
+        System.out.println(b);
+        return b;
+    }
+
+
+
+    public void AdminPage(ActionEvent actionEvent) {
+    }
+
+    /**
+     * Schließt die Seite und öffnet wieder das Log-in Fenster
+     */
+    public void logOff() {
+        Stage stage = (Stage) button_submit.getScene().getWindow();
+        stage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/signin.fxml"));
+        Scene logInScene = null;
+        try {
+            logInScene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        Stage logInWindow = new Stage();
+        logInWindow.setScene(logInScene);
+        logInWindow.setTitle("LogIn");
+        logInWindow.show();
+    }
+
+    public void setAdminPageButton(Event event) {
+        if (SignInController.currentUser.isAdmin()) menu_adminPage.setVisible(true);
+    }
 
     public void submit() {
         where = new StringBuilder("WHERE ");
         select = new StringBuilder("SELECT ");
         String a = " AND ";
+        selectedCols.clear();
 
         // Select Block
-        Set<CheckBox> checkBoxes = new HashSet<>();
+        Queue<CheckBox> checkBoxes = new LinkedList<>();
         checkBoxes.add(check_title);
         checkBoxes.add(check_author);
         checkBoxes.add(check_publisher);
         checkBoxes.add(check_rating);
         checkBoxes.add(check_subareas);
 
+        // detects selected boxes
         for (CheckBox cb : checkBoxes) {
             if (cb.isSelected()) {
-                select.append(cb.getId().replace("check_", ""));
+                String curr = cb.getId().replace("check_", "");
+                select.append(curr);
                 select.append(", ");
+                selectedCols.add(curr);
             }
         }
-       if (!select.toString().equals("SELECT ")) {
-           select.delete(select.length() - 2, select.length());
-       }
+
+        // no checkboxes selected -> program shows every column
+        if (selectedCols.isEmpty()) {
+            for (CheckBox cb : checkBoxes
+            ) {
+                selectedCols.add(cb.getId().replace("check_", ""));
+            }
+        }
+
+        // deletes ", " after last column
+        if (!select.toString().equals("SELECT ")) {
+            select.delete(select.length() - 2, select.length());
+        }
 
         // Where Block
         Set<TextField> textFields = new HashSet<>();
@@ -118,38 +166,8 @@ public class OverViewController {
         String table = response.readEntity(String.class);
         setResultTable(table);
 
-       table = table.replace("//", "\n").replace("; ", "\t\t");
-       text_result.setText(table);
         label_error.setText(String.valueOf(response.getStatusInfo()));
 
-    }
-
-
-
-    public void AdminPage(ActionEvent actionEvent) {
-    }
-
-    /**
-     * Schließt die Seite und öffnet wieder das Log-in Fenster
-     */
-    public void logOff() {
-        Stage stage = (Stage) button_submit.getScene().getWindow();
-        stage.close();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/signin.fxml"));
-        Scene logInScene = null;
-        try {
-            logInScene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-        Stage logInWindow = new Stage();
-        logInWindow.setScene(logInScene);
-        logInWindow.setTitle("LogIn");
-        logInWindow.show();
-    }
-
-    public void setAdminPageButton(Event event) {
-        if (SignInController.currentUser.isAdmin()) menu_adminPage.setVisible(true);
     }
 
     /**
@@ -158,7 +176,7 @@ public class OverViewController {
      * @param actionEvent beinhaltet den Wert, was sortiert werden soll
      */
     public void setSortyBy(ActionEvent actionEvent) {
-        Set<String> sorts = new HashSet<>();
+        Queue<String> sorts = new LinkedList<>();
         sorts.add("Title");
         sorts.add("Author");
         sorts.add("Publisher");
@@ -167,7 +185,6 @@ public class OverViewController {
 
         if (where == null) where = new StringBuilder();
         if (select == null) select = new StringBuilder("SELECT ");
-        System.out.println(actionEvent.getTarget());
         String actionTarget = actionEvent.getTarget().toString();
         orderBy = new StringBuilder(" ORDER BY ");
         for (String s: sorts
@@ -179,8 +196,6 @@ public class OverViewController {
                 String table = response.readEntity(String.class);
                 setResultTable(table);
                 System.out.println(table);
-                table = table.replace("//", "\n").replace("; ", "\t\t");
-                text_result.setText(table);
                 label_error.setText(response.getStatus() == 100 ?
                         response.getStatusInfo().getReasonPhrase() : String.valueOf(response.getStatusInfo()));
                 orderBy = new StringBuilder();
@@ -190,8 +205,7 @@ public class OverViewController {
     }
 
     public void setResultTable(String result) {
-        grid_resultTable.setVisible(false);
-        String[] rows = result.split("//");
+        String[] rows = result.split("// ");
         String[] cols = rows[0].split("; ");
         System.out.println("Rows");
         augabeArray(rows);
@@ -199,32 +213,34 @@ public class OverViewController {
         augabeArray(cols);
         int anzahlZeilen = rows.length - 1;
         int anzahlSpalten = cols.length;
-        grid_resultTable.setGridLinesVisible(true);
 
+        table_result.getColumns().clear();
+        table_result.getItems().clear();
+
+        for (String col : selectedCols
+        ) {
+            TableColumn<Buch, String> curr = new TableColumn<>(col);
+            curr.setCellValueFactory(new PropertyValueFactory<>(col));
+            table_result.getColumns().add(curr);
+        }
+
+        // create table array
         String[][] table = new String[anzahlZeilen][anzahlSpalten];
         for (int i = 0; i < anzahlZeilen; i++) {
             String[] currCols = rows[i].split("; ");
             System.arraycopy(currCols, 0, table[i], 0, anzahlSpalten);
         }
 
-        for (int i = 0; i < anzahlSpalten; i++) grid_resultTable.addRow(i);
-
-        for (int i = 0; i < anzahlZeilen; i++) {
-            grid_resultTable.addColumn(i);
-            String[] currRow = table[i];
-            for (int j = 0; j < anzahlSpalten; j++) {
-                Node n = new Label();
-                System.out.println("set Text to: " + currRow[j]);
-                n.setAccessibleText(currRow[j]);
-                n.setVisible(true);
-                grid_resultTable.add(n, j, i);
-            }
+        for (String[] column : table
+        ) {
+            Buch b = setBookData(column, selectedCols);
+            table_result.getItems().add(b);
         }
     }
 
-    public void augabeArray(String[] arr){
-        for (String s: arr
-             ) {
+    public void augabeArray(String[] arr) {
+        for (String s : arr
+        ) {
             System.out.println(s);
         }
     }

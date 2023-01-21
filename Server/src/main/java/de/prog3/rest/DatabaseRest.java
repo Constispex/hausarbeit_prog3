@@ -8,8 +8,11 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.Scanner;
 
 @Path("/sqlquery")
 public class DatabaseRest {
@@ -24,19 +27,25 @@ public class DatabaseRest {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getSqlQuery(String res, @Context UriInfo uriInfo) {
         System.out.printf("[%s]: Query: %s%n",
-                new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()) , res);
-            ResultSet rs = DbConnection.execute(res);
+                new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()), res);
+        ResultSet rs = DbConnection.execute(res);
 
-       String result = DbConnection.rsToString(Objects.requireNonNull(rs), getColumns(res));
-        System.out.println("sendToClient: " + result);
-        return Response.ok(result).build();
+        String result = DbConnection.rsToString(Objects.requireNonNull(rs), getColumns(res));
+        try {
+            rs.close();
+            System.out.printf("[%s]: sendToClient: %s%n",
+                    new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()), result);
+            return Response.ok(result).build();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError().build();
+        }
     }
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response postQuery(String query) {
         ResultSet curr = queries.get(query);
-
         String res = DbConnection.rsToString(curr, getColumns(query));
 
         return Response.ok(res).build();
@@ -54,6 +63,4 @@ public class DatabaseRest {
         scanner.close();
         return columns;
     }
-
-
 }

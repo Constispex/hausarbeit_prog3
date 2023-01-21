@@ -43,6 +43,7 @@ dependencies {
     implementation "org.glassfish.jaxb:jaxb-runtime:${jaxbVersion}"
 
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation project(path: ':Server')
     annotationProcessor("javax.annotation:javax.annotation-api:1.3.2")
 
     implementation project(':Common')

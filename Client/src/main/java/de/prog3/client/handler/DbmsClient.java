@@ -23,27 +23,12 @@ public class DbmsClient {
         this.client = ClientBuilder.newClient();
     }
 
-    public void get(String uri) {
-        WebTarget target = getTarget("GET", uri);
-        Response response = target.request(MediaType.TEXT_PLAIN).get();
-        if (status(response) == 200) {
-            String auffuehrung = response.readEntity(String.class);
-            System.out.println(auffuehrung);
-        }
-    }
-
     public Response post(String uri, User user) {
         WebTarget target = getTarget("POST", uri);
         String login = user.getName() + ":" + user.getPassword(); // syntax = username:password
         Entity<String> entity = Entity.entity(login, MediaType.TEXT_PLAIN);
-        Response response = target.request().post(entity);
 
-        if (status(response) == 200) { // response successful
-            //String location = response.getLocation().toString();
-
-            //System.out.println("Location: " + location);
-        }
-        return response;
+        return target.request().post(entity);
     }
 
     public Response post(String uri, StringBuilder select, StringBuilder where, StringBuilder sortBy) {

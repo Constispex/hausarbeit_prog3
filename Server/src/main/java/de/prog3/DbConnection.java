@@ -1,33 +1,36 @@
 package de.prog3;
 
-import java.sql.*;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class DbConnection {
     private static final String CURR_DATABASE = "Informatik";
-    private static boolean dbExists = false;
-    private static boolean tableExist = false;
 
     private DbConnection(){
 
     }
 
     public static ResultSet execute(String res) {
-        if (!dbExists) createDatabase();
-        if (!tableExist) createTable();
-
         Statement statement = null;
         try {
             statement = getConnection(CURR_DATABASE).createStatement();
             statement.closeOnCompletion();
             return statement.executeQuery(res);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error in execute: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 Objects.requireNonNull(statement).close();
             } catch (SQLException e) {
-                System.err.println(e.getMessage());
+                System.err.println("Error in execute: " + e.getMessage());
+                e.printStackTrace();
             }
         }
         return null;
@@ -37,89 +40,50 @@ public class DbConnection {
         java.sql.Connection con = null;
         try {
             con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/" + database, "root", "");
+                    "jdbc:mariadb://localhost:3306/" + database, "root", "");
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
         Objects.requireNonNull(con);
-
         return con;
     }
 
 
-    private static void createTable() {
-        Statement statement = null;
-        try {
-            if (!dbExists) createDatabase();
-            statement = getConnection(CURR_DATABASE).createStatement();
-            String sql = """
-                create table IF NOT EXISTS Buecher
-                (
-                    Title     varchar(150) not null,
-                    Author    varchar(600) null,
-                    Publisher varchar(200) null,
-                    Rating    int(1)       null,
-                    Subareas  varchar(200) null,
-                    constraint Informatik_pk
-                        primary key (Title)
-                );
-                """;
-            statement.executeUpdate(sql);
-            statement.close();
-            tableExist = true;
-            //insertTestColumn();
+    private static void createTable() throws SQLException, IOException {
+        String sql = "SHOW TABLES LIKE 'Buecher'";
+        ResultSet rs;
+        try (Statement stIfExists = getConnection(CURR_DATABASE).createStatement()) {
+            stIfExists.execute(sql);
+            rs = stIfExists.getResultSet();
+        }
+        if (!rs.next()) {
+            try (Scanner scanner = new Scanner(Path.of("sql/Informatik.sql"));
+                 Statement stCreateAndInsert = getConnection(CURR_DATABASE).createStatement()) {
+                StringBuilder query = new StringBuilder();
 
-        } catch (SQLException sqlException) {
-            if (sqlException.getErrorCode() == 1007) { // Database already exist
-                System.out.println(sqlException.getMessage());
-            } else {
-                sqlException.printStackTrace();
-            }
-        } finally {
-            try {
-                Objects.requireNonNull(statement).close();
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
+                while (scanner.hasNext()) {
+                    String next = scanner.nextLine();
+                    if (next.contains(";")) {
+                        query.append(next);
+                        System.out.println("execute: " + query);
+                        stCreateAndInsert.execute(query.toString());
+                        query = new StringBuilder();
+                    } else {
+                        query.append(next);
+                    }
+                }
             }
         }
     }
 
-    private static void createDatabase() {
+    private static void createDatabase() throws SQLException {
         Statement statement = null;
+        String sql = "CREATE DATABASE IF NOT EXISTS " + CURR_DATABASE;
         try {
             statement = getConnection("").createStatement();
-            String sql = "CREATE DATABASE IF NOT EXISTS " + CURR_DATABASE;
             statement.execute(sql);
-            dbExists = true;
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
         } finally {
-            try {
-                Objects.requireNonNull(statement).close();
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-            }
-        }
-    }
-
-    private static void insertTestColumn() {
-        Statement statement = null;
-        try {
-            statement = getConnection(CURR_DATABASE).createStatement();
-            String sql = """
-            INSERT INTO buecher(Title, Author, Publisher, Rating, Subareas) 
-            VALUES ('Harry Potter 1', 'J.K. Rowling', 'Carlsen Verlag', '5', 'Magic, Fantasy') 
-            """;
-            statement.executeQuery(sql);
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                Objects.requireNonNull(statement).close();
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-            }
+            Objects.requireNonNull(statement).close();
         }
     }
 
@@ -137,7 +101,23 @@ public class DbConnection {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        System.out.println(sb + " " + columns);
         return sb.toString();
+    }
+
+    public static boolean setUpDatabase() {
+        try {
+            createDatabase();
+            createTable();
+        } catch (SQLException e) {
+            System.err.println("Error while setting up Database");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            System.err.println("sql file not found");
+            System.err.println(e.getMessage());
+            return false;
+        }
+        return true;
     }
 }
