@@ -2,6 +2,7 @@ package de.prog3.client.controller;
 
 import de.prog3.client.handler.DbmsClient;
 import de.prog3.client.model.Book;
+import de.prog3.client.model.BookHolder;
 import jakarta.ws.rs.core.Response;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -50,14 +51,14 @@ public class OverViewController {
     @FXML
     public TableView<Book> table_result;
     private static final List<String> selectedCols = new ArrayList<>();
-    final String BASE_URI = "http://localhost:8080/rest";
+    static final String BASE_URI = "http://localhost:8080/rest";
     private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
-
     private StringBuilder select;
     private StringBuilder where;
     private StringBuilder orderBy;
+    private final String SERVER_ADDRESS = "/sqlquery";
 
-    private static Book setBookData(String[] column, List<String> selectedCols) {
+    private static Book setBookData(String[] column) {
         Book b = new Book();
         for (int i = 0; i < selectedCols.size(); i++) {
             String col = selectedCols.get(i);
@@ -153,14 +154,13 @@ public class OverViewController {
                 countWhere++;
             }
         }
-        if (slider_rating.getValue() > 0) {
-            if (countWhere > 0) where.append(a);
-            where.append("Rating=\"").append(slider_rating.getValue()).append("\"");
-        }
+        if (countWhere > 0) where.append(a);
+        where.append("Rating >=\"").append(slider_rating.getValue()).append("\"");
+
 
         if (where.toString().equals("WHERE ")) where.replace(0, where.length(), "");
 
-        Response response = dbmsClient.post("/sqlquery", select, where, orderBy);
+        Response response = dbmsClient.post(SERVER_ADDRESS, select, where, orderBy);
 
         String table = response.readEntity(String.class);
         setResultTable(table);
@@ -190,7 +190,7 @@ public class OverViewController {
         ) {
             if (actionTarget.contains(s.toLowerCase())){
                 orderBy.append(s);
-                Response response = dbmsClient.post("/sqlquery", select, where, orderBy);
+                Response response = dbmsClient.post(SERVER_ADDRESS, select, where, orderBy);
                 label_error.setText(String.valueOf(response.getStatusInfo()));
                 String table = response.readEntity(String.class);
                 setResultTable(table);
@@ -228,31 +228,29 @@ public class OverViewController {
 
         for (String[] column : table
         ) {
-            Book b = setBookData(column, selectedCols);
+            Book b = setBookData(column);
             table_result.getItems().add(b);
         }
     }
 
-    public void augabeArray(String[] arr) {
-        for (String s : arr
-        ) {
-            System.out.println(s);
-        }
-    }
-
     public void editBook() {
+        BookHolder bookHolder = BookHolder.getInstance();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/editbook.fxml"));
         Scene editBookScene = null;
+
+        bookHolder.setBook(getCurrBook());
         try {
             editBookScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
         Stage editBookStage = new Stage();
-        editBookStage.setUserData(getCurrBook());
         editBookStage.setScene(editBookScene);
-        editBookStage.setTitle("Add Book");
-        editBookStage.show();
+        editBookStage.setTitle("Edit Book");
+        editBookStage.showAndWait();
+
+        submit();
+        tableClicked();
 
     }
 
@@ -260,7 +258,7 @@ public class OverViewController {
         Book b = getCurrBook();
         if (b != null) {
             String sql = "DELETE FROM buecher WHERE Title = \"" + b.getTitle() + "\"";
-            Response response = dbmsClient.post("/sqlquery", sql);
+            Response response = dbmsClient.post(SERVER_ADDRESS, sql);
             label_error.setText(response.getStatusInfo().toString());
             submit();
         }
@@ -297,6 +295,7 @@ public class OverViewController {
         Stage logInWindow = new Stage();
         logInWindow.setScene(logInScene);
         logInWindow.setTitle("Add Book");
-        logInWindow.show();
+        logInWindow.showAndWait();
+        submit();
     }
 }

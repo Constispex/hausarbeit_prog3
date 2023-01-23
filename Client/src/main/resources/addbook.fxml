@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="438.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/18"
+      fx:controller="de.prog3.client.controller.AddBookController">
+    <Pane nodeOrientation="LEFT_TO_RIGHT" pickOnBounds="false" prefHeight="366.0" prefWidth="360.0"
+          style="-fx-border-color: black; -fx-background-color: lightgray;" VBox.vgrow="NEVER">
+        <VBox.margin>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
+        </VBox.margin>
+        <children>
+            <TextField fx:id="input_title" alignment="TOP_LEFT" layoutX="117.0" layoutY="12.0" prefHeight="34.0"
+                       prefWidth="231.0">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </TextField>
+            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="13.0" layoutY="14.0" prefHeight="34.0"
+                   prefWidth="103.0" text="Titel:">
+                <font>
+                    <Font name="System Bold" size="18.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="input_author" alignment="TOP_LEFT" layoutX="117.0" layoutY="67.0" prefHeight="60.0"
+                       prefWidth="231.0">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </TextField>
+            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="69.0" prefHeight="34.0"
+                   prefWidth="103.0" text="Autor/en:">
+                <font>
+                    <Font name="System Bold" size="18.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="input_publisher" alignment="TOP_LEFT" layoutX="117.0" layoutY="143.0" prefHeight="60.0"
+                       prefWidth="231.0">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </TextField>
+            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="143.0" prefHeight="34.0"
+                   prefWidth="103.0" text="Verlag:">
+                <font>
+                    <Font name="System Bold" size="18.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="input_rating" alignment="TOP_LEFT" layoutX="117.0" layoutY="222.0" prefHeight="34.0"
+                       prefWidth="231.0">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </TextField>
+            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="222.0" prefHeight="34.0"
+                   prefWidth="103.0" text="Bewertung:">
+                <font>
+                    <Font name="System Bold" size="18.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="input_subareas" alignment="TOP_LEFT" layoutX="117.0" layoutY="278.0" prefHeight="60.0"
+                       prefWidth="231.0">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </TextField>
+            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="13.0" layoutY="280.0" prefHeight="34.0"
+                   prefWidth="103.0" text="Teilgebiete:">
+                <font>
+                    <Font name="System Bold" size="18.0"/>
+                </font>
+            </Label>
+        </children>
+    </Pane>
+    <BorderPane prefHeight="41.0" prefWidth="400.0">
+        <left>
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#cancel" prefHeight="35.0" prefWidth="100.0"
+                    text="Abbrechen" BorderPane.alignment="CENTER"/>
+        </left>
+        <padding>
+            <Insets left="20.0" right="20.0"/>
+        </padding>
+        <right>
+            <Button mnemonicParsing="false" onAction="#addBook" prefHeight="35.0" prefWidth="100.0" text="Hinzufügen"
+                    BorderPane.alignment="CENTER"/>
+        </right>
+        <center>
+            <Label fx:id="label_error" prefHeight="53.0" prefWidth="135.0" textAlignment="CENTER"
+                   textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true" BorderPane.alignment="CENTER">
+                <font>
+                    <Font size="11.0"/>
+                </font>
+            </Label>
+        </center>
+    </BorderPane>
+</VBox>

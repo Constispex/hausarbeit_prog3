@@ -1,12 +1,11 @@
-module de.prog3.client {
+module de.prog.client {
     requires jakarta.ws.rs;
-    requires jakarta.annotation;
     requires jakarta.activation;
-    requires hausarbeit.prog3.Common.main;
+    requires hausarbeit.prog.Common.main;
     requires javafx.graphics;
     requires javafx.fxml;
     requires javafx.controls;
-    requires java.sql;
+    requires java.logging;
 
     opens de.prog3.client.controller to javafx.fxml;
     opens de.prog3.client.application to javafx.fxml;

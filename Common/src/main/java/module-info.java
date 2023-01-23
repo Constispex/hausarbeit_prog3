@@ -1,5 +1,4 @@
-module hausarbeit.prog3.Common.main {
+module hausarbeit.prog.Common.main {
     exports de.prog3.common;
-    requires java.sql;
 
 }

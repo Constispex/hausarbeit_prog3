@@ -1,5 +1,6 @@
 package de.prog3.common;
 
+@SuppressWarnings("CanBeFinal")
 public class User {
     String name;
 

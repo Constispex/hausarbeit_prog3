@@ -102,10 +102,10 @@
                         <TextField fx:id="text_author" layoutX="10.0" layoutY="102.0"/>
                         <TextField fx:id="text_publisher" layoutX="10.0" layoutY="160.0"/>
                         <Label layoutX="15.0" layoutY="142.0" text="Verlag"/>
-                        <Label layoutX="11.666666984558105" layoutY="200.0" text="Bewertung (0 = deactivated)"/>
+                        <Label layoutX="11.666666984558105" layoutY="200.0" text="Bewertung (mindestens)"/>
                         <Slider fx:id="slider_rating" blockIncrement="1.0" layoutX="10.0" layoutY="225.0"
-                                majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true"
-                                showTickMarks="true" snapToTicks="true"/>
+                                majorTickUnit="1.0" max="5.0" min="1.0" minorTickCount="0" showTickLabels="true"
+                                showTickMarks="true" snapToTicks="true" value="1.0"/>
                         <TextField fx:id="text_subareas" layoutX="10.0" layoutY="292.0"/>
                         <Label layoutX="11.6" layoutY="274.0" text="Teilgebiete"/>
                         <Label alignment="CENTER" layoutX="67.0" prefHeight="27.0" prefWidth="53.0" text="Filter"

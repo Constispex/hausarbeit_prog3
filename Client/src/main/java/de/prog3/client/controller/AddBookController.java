@@ -8,8 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class addBookController {
-    final String BASE_URI = "http://localhost:8080/rest";
+public class AddBookController {
+    static final String BASE_URI = "http://localhost:8080/rest";
     private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
     @FXML
     public TextField input_title;
@@ -37,11 +37,23 @@ public class addBookController {
         b.setRating(input_rating.getText());
         b.setSubareas(input_subareas.getText());
 
-        if (b.getTitle() != null) {
-            Response response = dbmsClient.post("/sqlquery", "INSERT INTO buecher (Title, Author, Publisher, Rating, Subareas) VALUES (" + b.toSqlQuery(b) + ");");
-            label_error.setText(response.getStatusInfo().getReasonPhrase());
-            if (response.getStatus() == 200) {
-                label_error.setText("Hinzufügen erfolgreich");
+        if (!input_title.getText().isEmpty()) {
+            int rating;
+            try {
+                rating = Integer.parseInt(b.getRating());
+            } catch (NumberFormatException n) {
+                label_error.setText("Rating muss eine Zahl sein");
+                return;
+            }
+            if (rating > 0 && rating <= 5) {
+                Response response = dbmsClient.post("/sqlquery", "INSERT INTO buecher (Title, Author, Publisher, Rating, Subareas) VALUES (" + b.toSqlQuery(b) + ");");
+
+                label_error.setText(response.getStatusInfo().getReasonPhrase());
+                if (response.getStatus() == 200) {
+                    label_error.setText("Hinzufügen erfolgreich");
+                }
+            } else {
+                label_error.setText("Rating muss zwischen 1 und 5 sein");
             }
         } else {
             label_error.setText("please enter at least the title");
