@@ -2,11 +2,11 @@ package de.prog3.client.model;
 
 public class Book {
 
-    String title;
-    String author;
-    String publisher;
-    String rating;
-    String subareas;
+    private String title;
+    private String author;
+    private String publisher;
+    private String rating;
+    private String subareas;
 
     public String toSqlQuery(Book b) {
         return addQuotes(b.title) + ", " +

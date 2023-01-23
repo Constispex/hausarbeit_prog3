@@ -20,8 +20,6 @@ w
 G.idea/sonarlint/issuestore/f/0/f07866736216be0ee2aba49e392191aeae700a35,b\f\bfb9453d49af9bc40f5f7a5f034be3c7ef8fa6bf
 w
 G.idea/sonarlint/issuestore/0/5/05efc8b1657769a27696d478ded1e95f38737233,3\c\3c8c56407c35e5f5ebbd6c7250a79af8128a13a6
-\
-,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
 w
 G.idea/sonarlint/issuestore/5/1/517b060a70b251df04ba6cb5d7f55bfb6be1b7a2,4\6\46015e736dd94a3ebb486ddde440b35a046aad76
 w
@@ -46,3 +44,11 @@ C
 Client/build.gradle,5\e\5e22195d533035367bb8e02341b5f474f57c18b6
 ^
 .Server/src/main/java/de/prog3/server/Main.java,f\2\f2f4e8aa8971d21e592c1369318f0da220087f6b
+`
+0Server/src/main/java/de/prog3/rest/UserRest.java,2\6\2687017b668c03dd8b94c96e759fc48034921973
+U
+%Client/src/main/java/module-info.java,b\3\b3d3918774ab770190b0b8adb1fbe644b8bf15e3
+U
+%Common/src/main/java/module-info.java,e\f\ef5fddaf2c0c7f5e9a6a2308db88bcc023a44a2f
+^
+.Common/src/main/java/de/prog3/common/User.java,c\8\c8cfe16a54f803b8e1673f9a7b505a522612e10a

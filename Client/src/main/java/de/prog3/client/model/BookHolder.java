@@ -1,9 +1,16 @@
 package de.prog3.client.model;
 
+/**
+ * Singleton fürs Speichern eines ausgewählten Buches.
+ * Wird verwendet, um bei einem Szenenwechsel das ausgewählte Buch abzurufen
+ */
 public class BookHolder {
     private Book book;
     private static final BookHolder INSTANCE = new BookHolder();
 
+    /**
+     * privater Constructor, damit nur eine Instanz existiert
+     */
     private BookHolder() {
     }
 

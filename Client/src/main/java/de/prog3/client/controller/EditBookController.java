@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 public class EditBookController {
 
-    static final String BASE_URI = "http://localhost:8080/rest";
+    private static final String BASE_URI = "http://localhost:8080/rest";
     private Book currBook;
     private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
     @FXML
@@ -27,6 +27,9 @@ public class EditBookController {
     @FXML
     public Label label_error;
 
+    /**
+     * Fills in the fields with the selected book
+     */
     public void initialize() {
         BookHolder bookHolder = BookHolder.getInstance();
         currBook = bookHolder.getBook();

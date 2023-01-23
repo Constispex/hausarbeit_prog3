@@ -50,7 +50,7 @@
                 </items>
             </Menu>
             <Menu fx:id="menu_menu" mnemonicParsing="false" text="Menu">
-                <MenuItem id="advAccess" fx:id="menu_logoff" mnemonicParsing="false" onAction="#logOff"
+                <MenuItem id="menu" mnemonicParsing="false" onAction="#logOff"
                           text="Abmelden"/>
             </Menu>
         </MenuBar>

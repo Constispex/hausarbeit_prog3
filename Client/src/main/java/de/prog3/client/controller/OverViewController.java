@@ -15,7 +15,17 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
+// TODO comment
 public class OverViewController {
+    private static final String BASE_URI = "http://localhost:8080/rest";
+    @FXML
+    public CheckBox check_title;
+    @FXML
+    public CheckBox check_author;
+    @FXML
+    public CheckBox check_publisher;
+    @FXML
+    public CheckBox check_rating;
     @FXML
     public TextField text_title;
     @FXML
@@ -29,35 +39,31 @@ public class OverViewController {
     @FXML
     public CheckBox check_subareas;
     @FXML
-    public CheckBox check_title;
-    @FXML
-    public CheckBox check_author;
-    @FXML
-    public CheckBox check_publisher;
-    @FXML
-    public CheckBox check_rating;
-    @FXML
     public Label label_error;
     @FXML
-    public MenuItem menu_logoff;
-    @FXML
     public Button button_submit;
+    @FXML
+    public TableView<Book> table_result;
     @FXML
     public Button admin_edit;
     @FXML
     public Button admin_delete;
+
+    private static final List<String> selectedCols = new ArrayList<>();
     @FXML
     public Button admin_add;
-    @FXML
-    public TableView<Book> table_result;
-    private static final List<String> selectedCols = new ArrayList<>();
-    static final String BASE_URI = "http://localhost:8080/rest";
     private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
     private StringBuilder select;
     private StringBuilder where;
     private StringBuilder orderBy;
     private final String SERVER_ADDRESS = "/sqlquery";
 
+    /**
+     * Creates a book with the data in the selected columns
+     *
+     * @param column current Book
+     * @return created book
+     */
     private static Book setBookData(String[] column) {
         Book b = new Book();
         for (int i = 0; i < selectedCols.size(); i++) {
@@ -75,13 +81,16 @@ public class OverViewController {
         return b;
     }
 
+    /**
+     * Checks if User is admin -> Enables/Disables Add Button
+     */
     @FXML
     public void initialize() {
         if (SignInController.currentUser.isAdmin()) admin_add.setDisable(false);
     }
 
     /**
-     * Schließt die Seite und öffnet wieder das Log-in Fenster
+     * Closes the page and opens the login window again
      */
     public void logOff() {
         Stage stage = (Stage) button_submit.getScene().getWindow();
@@ -98,6 +107,45 @@ public class OverViewController {
         logInWindow.setTitle("LogIn");
         logInWindow.show();
     }
+
+    /**
+     * Checkt, wonach sortiert werden soll. Die Methode besitzt ein Set mit allen Sortiermöglichkeiten.
+     * Falls davor kein Filter gesetzt worden ist, wird die Query dennoch ausgeführt.
+     * @param actionEvent beinhaltet den Wert, was sortiert werden soll
+     */
+    public void setSortyBy(ActionEvent actionEvent) {
+        Queue<String> sorts = new LinkedList<>();
+        sorts.add("Title");
+        sorts.add("Author");
+        sorts.add("Publisher");
+        sorts.add("Rating");
+        sorts.add("Subareas");
+
+        if (where == null) where = new StringBuilder();
+        if (select == null) select = new StringBuilder("SELECT ");
+        String actionTarget = actionEvent.getTarget().toString();
+        orderBy = new StringBuilder(" ORDER BY ");
+        for (String s: sorts
+        ) {
+            if (actionTarget.contains(s.toLowerCase())){
+                orderBy.append(s);
+                Response response = dbmsClient.post(SERVER_ADDRESS, select, where, orderBy);
+                label_error.setText(String.valueOf(response.getStatusInfo()));
+                String table = response.readEntity(String.class);
+                setResultTable(table);
+                System.out.println(table);
+                label_error.setText(response.getStatus() == 100 ?
+                        response.getStatusInfo().getReasonPhrase() : String.valueOf(response.getStatusInfo()));
+                orderBy = new StringBuilder();
+                break;
+            }
+        }
+    }
+
+    /**
+     * Creates a query from the selected criteria.
+     * Then sends the query to the server
+     */
     public void submit() {
         where = new StringBuilder("WHERE ");
         select = new StringBuilder("SELECT ");
@@ -170,39 +218,11 @@ public class OverViewController {
     }
 
     /**
-     * Checkt, wonach sortiert werden soll. Die Methode besitzt ein Set mit allen Sortiermöglichkeiten.
-     * Falls davor kein Filter gesetzt worden ist, wird die Query dennoch ausgeführt.
-     * @param actionEvent beinhaltet den Wert, was sortiert werden soll
+     * Creates a string array (rows) with string arrays (columns).
+     * After that, the method creates the selected columns and fills the table with rows
+     *
+     * @param result Query sent by the server
      */
-    public void setSortyBy(ActionEvent actionEvent) {
-        Queue<String> sorts = new LinkedList<>();
-        sorts.add("Title");
-        sorts.add("Author");
-        sorts.add("Publisher");
-        sorts.add("Rating");
-        sorts.add("Subareas");
-
-        if (where == null) where = new StringBuilder();
-        if (select == null) select = new StringBuilder("SELECT ");
-        String actionTarget = actionEvent.getTarget().toString();
-        orderBy = new StringBuilder(" ORDER BY ");
-        for (String s: sorts
-        ) {
-            if (actionTarget.contains(s.toLowerCase())){
-                orderBy.append(s);
-                Response response = dbmsClient.post(SERVER_ADDRESS, select, where, orderBy);
-                label_error.setText(String.valueOf(response.getStatusInfo()));
-                String table = response.readEntity(String.class);
-                setResultTable(table);
-                System.out.println(table);
-                label_error.setText(response.getStatus() == 100 ?
-                        response.getStatusInfo().getReasonPhrase() : String.valueOf(response.getStatusInfo()));
-                orderBy = new StringBuilder();
-                break;
-            }
-        }
-    }
-
     public void setResultTable(String result) {
         String[] rows = result.split("// ");
         String[] cols = rows[0].split("; ");
@@ -233,6 +253,11 @@ public class OverViewController {
         }
     }
 
+    /**
+     * Is executed when the delete button is pressed.
+     * The current book is stored by the singleton class BookHolder.
+     * Opens a new window for editing the book
+     */
     public void editBook() {
         BookHolder bookHolder = BookHolder.getInstance();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/editbook.fxml"));
@@ -254,6 +279,10 @@ public class OverViewController {
 
     }
 
+    /**
+     * Action Event for pressing the delete button.
+     * Button deletes current selected Book
+     */
     public void deleteBook() {
         Book b = getCurrBook();
         if (b != null) {
@@ -265,6 +294,10 @@ public class OverViewController {
         tableClicked();
     }
 
+    /**
+     * Checks, if User is admin and enables/disables admin buttons.
+     * Buttons are enabled only when a row is selected
+     */
     public void tableClicked() {
         boolean adminAccess = SignInController.currentUser.isAdmin();
         Book b = getCurrBook();
@@ -280,10 +313,20 @@ public class OverViewController {
 
     }
 
+    /**
+     * Get the selected Book.
+     *
+     * @return selected Book. If none selected -> null
+     */
     public Book getCurrBook() {
         return table_result.getSelectionModel().getSelectedItem();
     }
 
+    /**
+     * Action Event for pressing the add button.
+     * Loads the addbook.fxml file.
+     * Then submit() to update the query
+     */
     public void addBook() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/addbook.fxml"));
         Scene logInScene = null;
