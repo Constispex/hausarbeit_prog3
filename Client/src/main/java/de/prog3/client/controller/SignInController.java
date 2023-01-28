@@ -13,21 +13,32 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Der Controller verwaltet die Eingabe von Username und Passwort.
+ */
 public class SignInController {
-
     @FXML
     public TextField text_username;
-
     @FXML
     public Button button_submit;
-
     @FXML
     public Label label_error;
     @FXML
     TextField text_password;
+    private static User currentUser;
 
-    public static User currentUser;
+    public static User getCurrentUser() {
+        return currentUser;
+    }
 
+    public static void setCurrentUser(User currentUser) {
+        SignInController.currentUser = currentUser;
+    }
+
+    /**
+     * Überprüft die User Eingaben und schickt diese an den Server.
+     * Wenn die Eingaben korrekt sind, öffnet sich das Hauptfenster
+     */
     public void submit() {
         String username = this.text_username.getText();
         String password = this.text_password.getText();
@@ -60,13 +71,14 @@ public class SignInController {
 
                     boolean isAdmin = response.readEntity(String.class).equals("true");
 
-                    currentUser = new User(username, password, isAdmin);
+                    setCurrentUser(new User(username, password, isAdmin));
 
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/overview.fxml"));
                     Scene secondScene;
                     try {
                         secondScene = new Scene(fxmlLoader.load());
                     } catch (IOException e) {
+                        System.err.println("FXML File not found");
                         throw new RuntimeException(e);
                     }
                     Stage mainWindow = new Stage();

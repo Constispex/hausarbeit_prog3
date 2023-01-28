@@ -90,7 +90,7 @@
                             </font>
                         </CheckBox>
                         <Label alignment="CENTER" layoutX="6.0" prefHeight="27.0" prefWidth="171.0"
-                               text="sichtbare Spalten" textAlignment="CENTER">
+                               text="Sichtbare Spalten" textAlignment="CENTER">
                             <font>
                                 <Font name="System Bold" size="18.0"/>
                             </font>

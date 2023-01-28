@@ -1,4 +1,4 @@
-package de.prog3;
+package de.prog3.server;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -9,13 +9,26 @@ import java.sql.Statement;
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * Beinhaltet sämtliche Methoden zum Verwalten der Datenbankverbindung.
+ * Es wird die Database Informatik verwendet.
+ */
 public class DbConnection {
+
     private static final String CURR_DATABASE = "Informatik";
 
-    private DbConnection(){
-
+    /**
+     * privater Constructor, da die Klasse nur aus static Methoden besteht und diese Klasse nicht instanziert werden soll
+     */
+    private DbConnection() {
     }
 
+    /**
+     * Führt eine SQL Query aus
+     *
+     * @param res mySql Query
+     * @return ResultSet mit dem Ergebnis
+     */
     public static ResultSet execute(String res) {
         Statement statement = null;
         try {
@@ -36,6 +49,12 @@ public class DbConnection {
         return null;
     }
 
+    /**
+     * Stellt die Verbindung mit einer bestimmten Datenbank her. Dafür wird der JDBC Treiber verwendet.
+     *
+     * @param database Die Datenbank, die verwendet wird
+     * @return Datenbankverbindung
+     */
     public static java.sql.Connection getConnection(String database) {
         java.sql.Connection con = null;
         try {
@@ -48,7 +67,12 @@ public class DbConnection {
         return con;
     }
 
-
+    /**
+     * Überprüft, ob Tabelle bereits existiert (hat SHOW TABLES min. 1 Ergebnis?)
+     *
+     * @throws SQLException Wirft eine Fehlermeldung, falls die Anfrage falsch ist, oder es einen Fehler mit der Datenbank gibt
+     * @throws IOException  Falls der Scanner einen Fehler wirft
+     */
     private static void createTable() throws SQLException, IOException {
         String sql = "SHOW TABLES LIKE 'Buecher'";
         ResultSet rs;
@@ -76,6 +100,11 @@ public class DbConnection {
         }
     }
 
+    /**
+     * Erstellt die Database, falls diese nicht existiert.
+     *
+     * @throws SQLException Wirft eine Fehlermeldung, falls die Anfrage falsch ist, oder es einen Fehler mit der Datenbank gibt
+     */
     private static void createDatabase() throws SQLException {
         Statement statement = null;
         String sql = "CREATE DATABASE IF NOT EXISTS " + CURR_DATABASE;
@@ -87,11 +116,18 @@ public class DbConnection {
         }
     }
 
+    /**
+     * Wandelt das ResultSet in einen String um, der dann an der Client geschickt wird.
+     *
+     * @param rs      das ResultSet, welches umgewandelt wird
+     * @param columns die Anzahl an Spalten
+     * @return ResultSet mit folgender Regex: "Zeile1Spalte1; Zeile1Spalte2; ... ; // Zeile2Spalte1; Zeile2Spalte2; ..."
+     */
     public static String rsToString(ResultSet rs, int columns) {
         StringBuilder sb = new StringBuilder();
 
         try {
-            while (rs.next()){
+            while (rs.next()) {
                 for (int i = 1; i <= columns; i++) {
                     sb.append(rs.getString(i)).append("; ");
                 }
@@ -104,6 +140,11 @@ public class DbConnection {
         return sb.toString();
     }
 
+    /**
+     * Erstellt Datenbank, falls diese noch nicht existiert. Bei einem Fehler wird der Server gestoppt.
+     *
+     * @return True, wenn Datenbank erfolgreich aufgesetzt worden ist.
+     */
     public static boolean setUpDatabase() {
         try {
             createDatabase();

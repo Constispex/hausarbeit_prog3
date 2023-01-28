@@ -1,6 +1,7 @@
-module de.prog.client {
+module de.prog3.client {
     requires jakarta.ws.rs;
     requires jakarta.activation;
+    requires jakarta.annotation;
     requires hausarbeit.prog.Common.main;
     requires javafx.graphics;
     requires javafx.fxml;
@@ -14,5 +15,4 @@ module de.prog.client {
     exports de.prog3.client.controller;
     exports de.prog3.client.handler;
     exports de.prog3.client.model;
-
 }

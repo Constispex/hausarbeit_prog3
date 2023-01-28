@@ -10,10 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class EditBookController {
-
-    private static final String BASE_URI = "http://localhost:8080/rest";
-    private Book currBook;
-    private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
     @FXML
     public TextField input_title;
     @FXML
@@ -26,6 +22,9 @@ public class EditBookController {
     public TextField input_subareas;
     @FXML
     public Label label_error;
+    private static final String BASE_URI = "http://localhost:8080/rest";
+    private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
+    private Book currBook;
 
     /**
      * Fills in the fields with the selected book
@@ -41,11 +40,17 @@ public class EditBookController {
         input_subareas.setText(currBook.getSubareas());
     }
 
+    /**
+     * cancel button -> schließt die Szene
+     */
     public void cancel() {
         Stage curr = (Stage) input_author.getScene().getWindow();
         curr.close();
     }
 
+    /**
+     * Bearbeitet das ausgewählte Buch und schickt eine Query an den Server.
+     */
     public void editBook() {
         String sqlQuery = "UPDATE Buecher SET " +
                 "title = '" + input_title.getText() + "', " +

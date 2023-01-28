@@ -8,6 +8,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Startet das Programm.
+ * Lädt die fxml Seite.
+ */
 public class DbmsApplication extends Application {
     public static void main(String[] args) {
         launch();

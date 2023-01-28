@@ -1,6 +1,5 @@
 package de.prog3.server;
 
-import de.prog3.DbConnection;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.ServerConfiguration;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
@@ -13,7 +12,10 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+/**
+ * Die Main Klasse startet den REST-Server und startet eine Überprüfung der Datenbankverbindung.
+ * Mit Enter kann der Server wieder gestoppt werden.
+ */
 public class Main {
     public static void main(String[] args) throws IOException, URISyntaxException {
         final String BASE_URI = "http://localhost:8080/rest";

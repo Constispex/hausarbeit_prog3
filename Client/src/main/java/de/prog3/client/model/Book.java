@@ -1,13 +1,23 @@
 package de.prog3.client.model;
 
+/**
+ * Die Buchklasse speichert alle wichtigen Informationen zu einem Buch. So können die Daten des Servers beim Client
+ * besser verarbeitet werden.
+ */
 public class Book {
-
     private String title;
     private String author;
     private String publisher;
     private String rating;
     private String subareas;
 
+    /**
+     * Gibt alle Attribute zurück, fürs einfügen in eine SQL Query
+     * Reihenfolge: Titel, Autor, Publisher, Rating, Subareas
+     *
+     * @param b Das Buch, welches umgewandelt werden soll
+     * @return die umgewandelte Query
+     */
     public String toSqlQuery(Book b) {
         return addQuotes(b.title) + ", " +
                 addQuotes(b.author) + ", " +
@@ -16,6 +26,12 @@ public class Book {
                 addQuotes(b.subareas);
     }
 
+    /**
+     * Fügt Apostrophe vor und nach einem Attribut ein.
+     *
+     * @param s Das Attribut
+     * @return Das Attribut mit Apostrophe
+     */
     private String addQuotes(String s) {
         return "'" + s + "'";
     }
@@ -60,6 +76,11 @@ public class Book {
         return subareas;
     }
 
+    /**
+     * Überschriebene toString Methode zum Ausgeben in der Konsole
+     *
+     * @return gibt alle Attribute der Klasse Buch zurück
+     */
     @Override
     public String toString() {
         return "Buch{" +

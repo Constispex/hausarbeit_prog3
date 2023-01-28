@@ -18,11 +18,23 @@ public class DbmsClient {
     private final Client client;
     private final String baseURI;
 
+    /**
+     * Setzt die URI und den Client
+     *
+     * @param baseURI ist die URL zum Server
+     */
     public DbmsClient(String baseURI) {
         this.baseURI = baseURI;
         this.client = ClientBuilder.newClient();
     }
 
+    /**
+     * Schickt Username und Passwort an den Server. Die Eingaben werden per ":" getrennt
+     *
+     * @param uri  die Zieladresse
+     * @param user Der User, der sich anmelden möchte
+     * @return Response, ob User existiert
+     */
     public Response post(String uri, User user) {
         WebTarget target = getTarget("POST", uri);
         String login = user.getName() + ":" + user.getPassword(); // syntax = username:password
@@ -31,6 +43,13 @@ public class DbmsClient {
         return target.request().post(entity);
     }
 
+    /**
+     * Schickt an den Server eine normale SQL Query ohne Rückgabewerte (Keine SELECT Anfragen)
+     *
+     * @param uri   die Zieladresse
+     * @param query die zu schickende SQL Query
+     * @return Response mit Status
+     */
     public Response post(String uri, String query) {
         WebTarget target = getTarget("POST", uri);
         Entity<String> entity = Entity.entity(query, MediaType.TEXT_PLAIN);
@@ -40,6 +59,15 @@ public class DbmsClient {
         return response;
     }
 
+    /**
+     * Schickt eine SELECT Anfrage an den Server. Der Server schickt dann das Ergebnis zurück.
+     *
+     * @param uri    die Zieladresse
+     * @param select der SELECT Teil der Anfrage
+     * @param where  der WHERE Teil der Anfrage
+     * @param sortBy der SORT BY Teil der Anfrage
+     * @return Response mit SELECT Ergebnis
+     */
     public Response post(String uri, StringBuilder select, StringBuilder where, StringBuilder sortBy) {
         Response response;
         try {
@@ -50,7 +78,7 @@ public class DbmsClient {
             response = target.request().post(entity);
 
             return response;
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Logger.getLogger(e.getMessage());
             return Response.status(100, "Bitte setzte erst den Filter, bevor du sortierst!").build();
         }
@@ -61,6 +89,12 @@ public class DbmsClient {
         return client.target(baseURI + uri);
     }
 
+    /**
+     * Dient zum Überprüfen des Statuses. Dieser wird in der Konsole ausgegeben
+     *
+     * @param response die Serverantwort
+     * @return gibt den Statuscode zurück
+     */
     private int status(Response response) {
         int code = response.getStatus();
         String reason = response.getStatusInfo().getReasonPhrase();

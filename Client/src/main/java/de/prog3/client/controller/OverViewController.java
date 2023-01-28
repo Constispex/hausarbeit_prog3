@@ -15,7 +15,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
-// TODO comment
+/**
+ * Die Klasse ist der Controller vom DBMS. Hier werden Methoden ausgeführt fürs Löschen und anzeigen der Datenbank.
+ */
 public class OverViewController {
     private static final String BASE_URI = "http://localhost:8080/rest";
     @FXML
@@ -48,10 +50,10 @@ public class OverViewController {
     public Button admin_edit;
     @FXML
     public Button admin_delete;
-
-    private static final List<String> selectedCols = new ArrayList<>();
     @FXML
     public Button admin_add;
+
+    private static final List<String> selectedCols = new ArrayList<>();
     private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
     private StringBuilder select;
     private StringBuilder where;
@@ -59,10 +61,10 @@ public class OverViewController {
     private final String SERVER_ADDRESS = "/sqlquery";
 
     /**
-     * Creates a book with the data in the selected columns
+     * Erstellt ein Buch mit den Inhalten der Spalten
      *
-     * @param column current Book
-     * @return created book
+     * @param column aktuelle Buch
+     * @return das erstellte Buch
      */
     private static Book setBookData(String[] column) {
         Book b = new Book();
@@ -82,15 +84,15 @@ public class OverViewController {
     }
 
     /**
-     * Checks if User is admin -> Enables/Disables Add Button
+     * Überprüft beim Aufrufen der Seite, ob der Nutzer Admin ist.
      */
     @FXML
     public void initialize() {
-        if (SignInController.currentUser.isAdmin()) admin_add.setDisable(false);
+        if (SignInController.getCurrentUser().isAdmin()) admin_add.setDisable(false);
     }
 
     /**
-     * Closes the page and opens the login window again
+     * Schließt die Seite und öffnet die Log-In Seite wieder.
      */
     public void logOff() {
         Stage stage = (Stage) button_submit.getScene().getWindow();
@@ -143,8 +145,7 @@ public class OverViewController {
     }
 
     /**
-     * Creates a query from the selected criteria.
-     * Then sends the query to the server
+     * Erstellt eine Abfrage aus den ausgewählten Kriterien. Sendet dann die Anfrage an den Server
      */
     public void submit() {
         where = new StringBuilder("WHERE ");
@@ -160,7 +161,7 @@ public class OverViewController {
         checkBoxes.add(check_rating);
         checkBoxes.add(check_subareas);
 
-        // detects selected boxes
+        // erkennt ausgewählte CheckBoxen
         for (CheckBox cb : checkBoxes) {
             if (cb.isSelected()) {
                 String curr = cb.getId().replace("check_", "");
@@ -170,7 +171,7 @@ public class OverViewController {
             }
         }
 
-        // no checkboxes selected -> program shows every column
+        // wenn keine Spalten ausgewählt sind, werden alle angezeigt
         if (selectedCols.isEmpty()) {
             for (CheckBox cb : checkBoxes
             ) {
@@ -178,7 +179,7 @@ public class OverViewController {
             }
         }
 
-        // deletes ", " after last column
+        // löscht ", " nach der letzten Spalte
         if (!select.toString().equals("SELECT ")) {
             select.delete(select.length() - 2, select.length());
         }
@@ -196,9 +197,9 @@ public class OverViewController {
                 if (countWhere > 0) where.append(a);
                 where
                         .append(t.getId().replace("text_", ""))
-                        .append("=\"")
+                        .append(" LIKE\"%")
                         .append(t.getText())
-                        .append("\"");
+                        .append("%\"");
                 countWhere++;
             }
         }
@@ -218,10 +219,10 @@ public class OverViewController {
     }
 
     /**
-     * Creates a string array (rows) with string arrays (columns).
-     * After that, the method creates the selected columns and fills the table with rows
+     * Erstellt ein String-Array (Zeilen) mit String-Arrays (Spalten).
+     * Danach erstellt die Methode die ausgewählten Spalten und füllt die Tabelle mit Zeilen
      *
-     * @param result Query sent by the server
+     * @param result Query, die vom Server gesendet wurde
      */
     public void setResultTable(String result) {
         String[] rows = result.split("// ");
@@ -248,15 +249,18 @@ public class OverViewController {
 
         for (String[] column : table
         ) {
-            Book b = setBookData(column);
-            table_result.getItems().add(b);
+            try {
+                Book b = setBookData(column);
+                table_result.getItems().add(b);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.addSuppressed(new ArrayIndexOutOfBoundsException());
+            }
         }
     }
 
     /**
-     * Is executed when the delete button is pressed.
-     * The current book is stored by the singleton class BookHolder.
-     * Opens a new window for editing the book
+     * Das aktuelle Buch wird von der Singleton-Klasse BookHolder gespeichert und
+     * öffnet ein neues Fenster zum Bearbeiten des Buches
      */
     public void editBook() {
         BookHolder bookHolder = BookHolder.getInstance();
@@ -280,8 +284,7 @@ public class OverViewController {
     }
 
     /**
-     * Action Event for pressing the delete button.
-     * Button deletes current selected Book
+     * Löscht das ausgewählte Buch
      */
     public void deleteBook() {
         Book b = getCurrBook();
@@ -295,11 +298,11 @@ public class OverViewController {
     }
 
     /**
-     * Checks, if User is admin and enables/disables admin buttons.
-     * Buttons are enabled only when a row is selected
+     * Überprüft, ob der Benutzer Admin ist und aktiviert bzw. deaktiviert die Admin-Schaltflächen.
+     * Die Buttons sind nur aktiviert, wenn eine Zeile ausgewählt ist
      */
     public void tableClicked() {
-        boolean adminAccess = SignInController.currentUser.isAdmin();
+        boolean adminAccess = SignInController.getCurrentUser().isAdmin();
         Book b = getCurrBook();
         if (b != null) {
             if (adminAccess) {
@@ -314,18 +317,15 @@ public class OverViewController {
     }
 
     /**
-     * Get the selected Book.
-     *
-     * @return selected Book. If none selected -> null
+     * Setzt das ausgewählte Buch
+     * @return das ausgewählte Buch, wenn keins ausgewählt ist → return null
      */
     public Book getCurrBook() {
         return table_result.getSelectionModel().getSelectedItem();
     }
 
     /**
-     * Action Event for pressing the add button.
-     * Loads the addbook.fxml file.
-     * Then submit() to update the query
+     * öffnet die addbook.fxml Datei. Danach wird die Tabelle neu geladen
      */
     public void addBook() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/addbook.fxml"));

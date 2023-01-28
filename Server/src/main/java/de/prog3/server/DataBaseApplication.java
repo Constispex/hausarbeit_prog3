@@ -7,6 +7,9 @@ import jakarta.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Die Klasse inkludiert die UserRest und DatabaseRest Klassen für den Empfang von Serveranfragen.
+ */
 public class DataBaseApplication extends Application {
     private final Set<Class<?>> classes = new HashSet<>();
 

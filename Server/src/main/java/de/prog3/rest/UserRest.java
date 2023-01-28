@@ -5,15 +5,24 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("register")
+/**
+ * Die Klasse verwaltet alle Anfragen die auf die Adresse "/register" kommen
+ */
+@Path("/register")
 public class UserRest {
     private final List<User> users = new ArrayList<>();
 
+    /**
+     * Constructor erstellt die voreingestellten Benutzer
+     * User 1: name: minf psswd: prog3 -> Kein Admin
+     * User 2: name: admin psswd: admin -> Ist Admin
+     */
     public UserRest() {
         User admin = new User("admin", "admin", true);
         User normal = new User("minf", "prog3", false);
@@ -22,15 +31,19 @@ public class UserRest {
         users.add(normal);
     }
 
-
+    /**
+     * Methode bekommt Name und Password eines Users. Die beiden Eingaben werden per ":" abgetrennt.
+     *
+     * @param res die User Eingabe, geschickt vom Client
+     * @return gibt den Status zurück. Und, ob der User Admin ist.
+     */
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    public Response getLoginData(String res, @Context UriInfo uriInfo) {
+    public Response getLoginData(String res) {
         String name;
         String password;
         String[] s = res.split(":");
-        UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
         name = s[0];
         password = s[1];
 
