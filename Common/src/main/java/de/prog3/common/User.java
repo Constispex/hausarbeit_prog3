@@ -1,9 +1,11 @@
 package de.prog3.common;
 
+import java.io.Serializable;
+
 /**
  * Speichert Name und Passwort und Adminrechte von einem Benutzer.
  */
-public class User {
+public class User implements Serializable {
 
     public String name;
     public String password;

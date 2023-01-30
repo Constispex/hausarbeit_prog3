@@ -2,11 +2,12 @@ package de.prog3.client.controller;
 
 import de.prog3.client.handler.DbmsClient;
 import de.prog3.client.model.Book;
-import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import javax.ws.rs.core.Response;
 
 public class AddBookController {
     static final String BASE_URI = "http://localhost:8080/rest";

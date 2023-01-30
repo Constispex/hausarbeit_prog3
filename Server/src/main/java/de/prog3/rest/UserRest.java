@@ -3,13 +3,14 @@ package de.prog3.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.prog3.common.User;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import org.json.JSONObject;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +38,10 @@ public class UserRest {
 
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getLoginData(JSONObject jsonObject) {
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response getLoginData(Entity<JSONObject> list) {
         try {
-            String currUser = mapper.writeValueAsString(jsonObject);
+            String currUser = mapper.writeValueAsString(list.getEntity());
             System.out.println(currUser);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

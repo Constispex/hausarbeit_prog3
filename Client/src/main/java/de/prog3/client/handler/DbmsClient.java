@@ -2,14 +2,14 @@ package de.prog3.client.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.prog3.common.User;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import org.json.JSONObject;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -49,16 +49,20 @@ public class DbmsClient {
      * Schickt Username und Passwort an den Server. Die Eingaben werden per ":" getrennt
      *
      * @param uri  die Zieladresse
-     * @param user Der User, der sich anmelden möchte
      * @return Response, ob User existiert
      */
     public Response post(JSONObject jsonObject, String uri) {
         WebTarget target = getTarget("POST", uri);
-        Entity<JSONObject> list = Entity.entity((jsonObject), MediaType.APPLICATION_JSON);
         System.out.printf("send: %s%n", jsonObject);
 
+        JSONObject test = new JSONObject();
+        test.put("name", "admin");
+        jsonObject = test;
+        Entity<JSONObject> list = Entity.entity((jsonObject), MediaType.APPLICATION_JSON);
         Response response = target.request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).header("Content-Type", "application/json").property("Content-Type", "application/json").post(list);
+
+
         status(response);
 
         return response;
@@ -99,12 +103,7 @@ public class DbmsClient {
      * @param response die Serverantwort
      * @return gibt den Statuscode zurück
      */
-    private int status(Response response) {
-        int code = response.getStatus();
-        String reason = response.getStatusInfo().getReasonPhrase();
-        System.out.printf("Status: %d %s%n", code, reason);
-        return code;
-    }
+
 
     /**
      * Schickt eine SELECT Anfrage an den Server. Der Server schickt dann das Ergebnis zurück.
@@ -127,7 +126,14 @@ public class DbmsClient {
             return response;
         } catch (NullPointerException e) {
             Logger.getLogger(e.getMessage());
-            return Response.status(100, "Bitte setzte erst den Filter, bevor du sortierst!").build();
+            return Response.status(100).build();
         }
+    }
+
+    private int status(Response response) {
+        int code = response.getStatus();
+        String reason = response.getStatusInfo().getReasonPhrase();
+        System.out.printf("Status: %d %s%n", code, reason);
+        return code;
     }
 }

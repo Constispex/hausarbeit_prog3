@@ -24,6 +24,7 @@ subprojects {
         restVersion = '3.0.0'
         jaxbVersion = '3.0.1'
         jdbcVersion = '2.1.2'
+        fasterxmlVersion = '2.14.2'
     }
 
     javafx {

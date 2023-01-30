@@ -3,7 +3,6 @@ package de.prog3.client.controller;
 import de.prog3.client.handler.DbmsClient;
 import de.prog3.client.model.Book;
 import de.prog3.client.model.BookHolder;
-import jakarta.ws.rs.core.Response;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.*;
 

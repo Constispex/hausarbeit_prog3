@@ -3,11 +3,12 @@ package de.prog3.client.controller;
 import de.prog3.client.handler.DbmsClient;
 import de.prog3.client.model.Book;
 import de.prog3.client.model.BookHolder;
-import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import javax.ws.rs.core.Response;
 
 public class EditBookController {
     @FXML

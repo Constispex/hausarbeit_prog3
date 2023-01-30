@@ -2,8 +2,8 @@ package de.prog3.server;
 
 import de.prog3.rest.DatabaseRest;
 import de.prog3.rest.UserRest;
-import jakarta.ws.rs.core.Application;
 
+import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
 

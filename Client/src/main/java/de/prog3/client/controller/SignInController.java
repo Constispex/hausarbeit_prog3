@@ -2,7 +2,6 @@ package de.prog3.client.controller;
 
 import de.prog3.client.handler.DbmsClient;
 import de.prog3.common.User;
-import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 /**

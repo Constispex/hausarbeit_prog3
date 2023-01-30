@@ -1,5 +1,6 @@
 package de.prog3.server;
 
+
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.ServerConfiguration;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
@@ -22,8 +23,8 @@ public class Main {
         Logger.getLogger("org.glassfish").setLevel(Level.SEVERE);
 
         URI baseURI = new URI(BASE_URI);
-        ResourceConfig config =
-                ResourceConfig.forApplicationClass(DataBaseApplication.class);
+        ResourceConfig config = new ResourceConfig(DataBaseApplication.class);
+
         HttpServer server =
                 GrizzlyHttpServerFactory.createHttpServer(baseURI, config);
         StaticHttpHandler handler = new StaticHttpHandler("web");
@@ -35,7 +36,7 @@ public class Main {
         if (DbConnection.setUpDatabase()) {
             System.out.println("Database set up completed");
         } else {
-            System.err.println("Server shut down - Database set up failed");
+            System.err.println("Server shutdown - Database set up failed");
             server.shutdown();
         }
         if (!server.isStarted()) server.start();
