@@ -58,7 +58,7 @@ public class OverViewController {
     private StringBuilder select;
     private StringBuilder where;
     private StringBuilder orderBy;
-    private final String SERVER_ADDRESS = "/sqlquery";
+    private static final String SERVER_ADDRESS = "/sqlquery";
 
     /**
      * Erstellt ein Buch mit den Inhalten der Spalten
@@ -88,7 +88,7 @@ public class OverViewController {
      */
     @FXML
     public void initialize() {
-        if (SignInController.getCurrentUser().isAdmin()) admin_add.setDisable(false);
+        if (SignInController.getCurrentUser().getAdmin().equals("true")) admin_add.setDisable(false);
     }
 
     /**
@@ -206,7 +206,7 @@ public class OverViewController {
         if (countWhere > 0) where.append(a);
         where.append("Rating >=\"").append(slider_rating.getValue()).append("\"");
 
-
+        // clears where part if its empty
         if (where.toString().equals("WHERE ")) where.replace(0, where.length(), "");
 
         Response response = dbmsClient.post(SERVER_ADDRESS, select, where, orderBy);
@@ -302,7 +302,7 @@ public class OverViewController {
      * Die Buttons sind nur aktiviert, wenn eine Zeile ausgewählt ist
      */
     public void tableClicked() {
-        boolean adminAccess = SignInController.getCurrentUser().isAdmin();
+        boolean adminAccess = SignInController.getCurrentUser().getAdmin().equals("true");
         Book b = getCurrBook();
         if (b != null) {
             if (adminAccess) {

@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -49,13 +50,13 @@ public class SignInController {
             text_password.clear();
         } else {
             System.out.printf("Username: %s \t Password: %s%n", username, password);
-            User u = new User(username, password, false);
+            User u = new User(username, password, "false");
             final String BASE_URI = "http://localhost:8080/rest";
 
             DbmsClient dbmsClient = new DbmsClient(BASE_URI);
 
-            Response response = dbmsClient.post("/register", u);
-
+            Response response = dbmsClient.post(new JSONObject(u), "/register");
+            System.out.println(response.getStatusInfo());
             switch (response.getStatus()) {
                 case 406 -> { // not Acceptable
                     label_error.setText("wrong password or user does not exist");
@@ -69,7 +70,7 @@ public class SignInController {
                     stage.close();
 
 
-                    boolean isAdmin = response.readEntity(String.class).equals("true");
+                    String isAdmin = response.readEntity(String.class);
 
                     setCurrentUser(new User(username, password, isAdmin));
 

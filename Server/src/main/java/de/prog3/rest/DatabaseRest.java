@@ -26,8 +26,8 @@ public class DatabaseRest {
      * @return die SQL Query bzw der Status
      */
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getSqlQuery(String res) {
         System.out.printf("[%s]: Query: %s%n",
                 new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()), res);
