@@ -28,8 +28,8 @@ public class DatabaseRest {
      * @return die SQL Query bzw der Status
      */
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getSqlQuery(String res) {
         Scanner n = new Scanner(res);
         String log = n.next() + " " + n.next();

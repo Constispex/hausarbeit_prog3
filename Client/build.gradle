@@ -40,13 +40,19 @@ dependencies {
     implementation "jakarta.ws.rs:jakarta.ws.rs-api:${restVersion}"
     implementation("jakarta.activation:jakarta.activation-api:2.1.0")
 
+    implementation "org.json:json:20220320"
+
     implementation "org.glassfish.jersey.core:jersey-client:${jerseyVersion}"
     implementation "org.glassfish.jersey.inject:jersey-hk2:${jerseyVersion}"
     implementation "org.glassfish.jaxb:jaxb-runtime:${jaxbVersion}"
 
+    implementation "com.google.code.gson:gson:2.10.1"
+
+
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     implementation project(path: ':Server')
     annotationProcessor("javax.annotation:javax.annotation-api:1.3.2")
+    implementation group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '3.0.3'
 
 
     implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"

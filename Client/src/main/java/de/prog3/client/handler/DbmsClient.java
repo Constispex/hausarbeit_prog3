@@ -7,6 +7,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.json.JSONObject;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +20,7 @@ public class DbmsClient {
     private final Client client;
     private final Logger logger = LogManager.getLogger(DbmsClient.class.getName());
     private final String baseURI;
+    public static final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Setzt die URI und den Client
@@ -54,7 +56,8 @@ public class DbmsClient {
      */
     public Response post(String uri, String query) {
         WebTarget target = getTarget("POST", uri);
-        Entity<String> entity = Entity.entity(query, MediaType.TEXT_PLAIN);
+        Entity<String> entity = Entity.entity(query, MediaType.APPLICATION_JSON);
+        System.out.println(entity);
         Response response = target.request().post(entity);
         status(response);
 
