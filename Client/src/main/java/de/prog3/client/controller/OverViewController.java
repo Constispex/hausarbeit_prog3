@@ -88,7 +88,7 @@ public class OverViewController {
      */
     @FXML
     public void initialize() {
-        if (SignInController.getCurrentUser().getAdmin().equals("true")) admin_add.setDisable(false);
+        if (SignInController.getCurrentUser().isAdmin()) admin_add.setDisable(false);
     }
 
     /**
@@ -302,7 +302,7 @@ public class OverViewController {
      * Die Buttons sind nur aktiviert, wenn eine Zeile ausgewählt ist
      */
     public void tableClicked() {
-        boolean adminAccess = SignInController.getCurrentUser().getAdmin().equals("true");
+        boolean adminAccess = SignInController.getCurrentUser().isAdmin();
         Book b = getCurrBook();
         if (b != null) {
             if (adminAccess) {

@@ -1,13 +1,12 @@
 package de.prog3.rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.prog3.common.User;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -28,8 +27,8 @@ public class UserRest {
      * User 2: name: admin psswd: admin -> Ist Admin
      */
     public UserRest() {
-        User admin = new User("admin", "admin", "true");
-        User normal = new User("minf", "prog3", "false");
+        User admin = new User("admin", "admin", true);
+        User normal = new User("minf", "prog3", false);
 
         users.add(admin);
         users.add(normal);
@@ -38,14 +37,17 @@ public class UserRest {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getLoginData(JSONObject jsonObject) {
-        try {
-            String currUser = mapper.writeValueAsString(jsonObject);
-            System.out.println(currUser);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            System.err.println(e.getMessage());
-        }
-        return Response.notAcceptable(null).build();
+    public Response getLoginData(Object o, @Context UriInfo uriInfo) {
+        System.out.println("getLoginData");
+        System.out.println(o.toString());
+        return Response.ok(o).build();
+    }
+
+    @GET
+    @Path("{login}")
+    @Produces("application/json")
+    public Response getUserLogIn(@PathParam("login") JSONObject login) {
+
+        return Response.ok(login, MediaType.APPLICATION_JSON).build();
     }
 }

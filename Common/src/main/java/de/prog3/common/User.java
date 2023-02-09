@@ -7,7 +7,7 @@ public class User {
 
     public String name;
     public String password;
-    public String isAdmin;
+    public boolean isAdmin;
 
     public User() {
     }
@@ -19,13 +19,13 @@ public class User {
      * @param password Password
      * @param isAdmin  hat Adminrechte
      */
-    public User(String name, String password, String isAdmin) {
+    public User(String name, String password, boolean isAdmin) {
         this.name = name;
         this.password = password;
         this.isAdmin = isAdmin;
     }
 
-    public String getAdmin() {
+    public boolean isAdmin() {
         return isAdmin;
     }
 

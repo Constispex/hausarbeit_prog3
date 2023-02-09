@@ -26,6 +26,7 @@ public class Main {
                 ResourceConfig.forApplicationClass(DataBaseApplication.class);
         HttpServer server =
                 GrizzlyHttpServerFactory.createHttpServer(baseURI, config);
+        System.out.println(server.getServerConfiguration().getName());
         StaticHttpHandler handler = new StaticHttpHandler("web");
         handler.setFileCacheEnabled(false);
         ServerConfiguration serverConfig = server.getServerConfiguration();

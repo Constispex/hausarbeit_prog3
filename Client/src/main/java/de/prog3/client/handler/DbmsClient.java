@@ -1,6 +1,8 @@
 package de.prog3.client.handler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.prog3.common.Tier;
 import de.prog3.common.User;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -11,6 +13,7 @@ import jakarta.ws.rs.core.Response;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -34,9 +37,21 @@ public class DbmsClient {
         this.client = ClientBuilder.newClient();
     }
 
-    public static JSONObject createJson(User user) {
+    public static void main(String[] args) throws JsonProcessingException {
+        User u = new User("test", "qwer", true);
+        Tier t = new Tier();
+        t.setAge(12);
+        t.setName("ASF");
+
+        //JSONObject jsonObject = createJson(u);
+        DbmsClient dbmsClient = new DbmsClient("http://localhost:8080/rest");
+        dbmsClient.post(createJson(t), "/register");
+        //dbmsClient.post(new JSONObject(u), "/register");
+    }
+
+    public static JSONObject createJson(Object o) {
         try {
-            String json = mapper.writeValueAsString(user);
+            String json = mapper.writeValueAsString(o);
             return new JSONObject(json);
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,26 +64,34 @@ public class DbmsClient {
      * Schickt Username und Passwort an den Server. Die Eingaben werden per ":" getrennt
      *
      * @param uri  die Zieladresse
-     * @param user Der User, der sich anmelden möchte
      * @return Response, ob User existiert
      */
     public Response post(JSONObject jsonObject, String uri) {
         WebTarget target = getTarget("POST", uri);
-        Entity<JSONObject> list = Entity.entity((jsonObject), MediaType.APPLICATION_JSON);
+        client.property("Content-Type", "application/json");
         System.out.printf("send: %s%n", jsonObject);
-
-        Response response = target.request(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON).header("Content-Type", "application/json").property("Content-Type", "application/json").post(list);
+        Logger.getLogger(" jakarta.ws.rs.client").setLevel(Level.ALL);
+        Entity<JSONObject> list = Entity.json(jsonObject);
+        Response response = target.request().post(list);
+        //Response response = target.request(MediaType.APPLICATION_JSON).accept("application/json").header("Content-Type", MediaType.APPLICATION_JSON).post(list);
         status(response);
-
         return response;
     }
 
     public Response get(JSONObject jsonObject, String uri) {
-        WebTarget target = getTarget("GET", uri);
-        Entity<JSONObject> entity = Entity.entity(jsonObject, MediaType.APPLICATION_JSON);
 
-        return target.request().get();
+        try {
+            System.out.println("JsonObjext as String via mapper: " + mapper.writeValueAsString(jsonObject));
+            WebTarget target = getTarget("GET", uri);
+            Response response = target.request(MediaType.APPLICATION_JSON).header("Accept", "application/json").get();
+            status(response);
+            return response;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            System.err.println(e.getMessage());
+        }
+
+        return Response.ok().build();
     }
 
     /**
@@ -102,7 +125,7 @@ public class DbmsClient {
     private int status(Response response) {
         int code = response.getStatus();
         String reason = response.getStatusInfo().getReasonPhrase();
-        System.out.printf("Status: %d %s%n", code, reason);
+        System.out.printf("Status: %d %s%n%s%n", code, reason, response.getHeaders());
         return code;
     }
 
