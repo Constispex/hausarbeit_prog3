@@ -13,7 +13,6 @@ import jakarta.ws.rs.core.Response;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -45,7 +44,7 @@ public class DbmsClient {
 
         //JSONObject jsonObject = createJson(u);
         DbmsClient dbmsClient = new DbmsClient("http://localhost:8080/rest");
-        dbmsClient.post(createJson(t), "/register");
+        dbmsClient.validateUser(u, "/register");
         //dbmsClient.post(new JSONObject(u), "/register");
     }
 
@@ -63,18 +62,19 @@ public class DbmsClient {
     /**
      * Schickt Username und Passwort an den Server. Die Eingaben werden per ":" getrennt
      *
-     * @param uri  die Zieladresse
+     * @param uri die Zieladresse
      * @return Response, ob User existiert
      */
-    public Response post(JSONObject jsonObject, String uri) {
+    public Response validateUser(User user, String uri) {
         WebTarget target = getTarget("POST", uri);
-        client.property("Content-Type", "application/json");
-        System.out.printf("send: %s%n", jsonObject);
-        Logger.getLogger(" jakarta.ws.rs.client").setLevel(Level.ALL);
-        Entity<JSONObject> list = Entity.json(jsonObject);
-        Response response = target.request().post(list);
-        //Response response = target.request(MediaType.APPLICATION_JSON).accept("application/json").header("Content-Type", MediaType.APPLICATION_JSON).post(list);
+        System.out.printf("send: %s%n", user);
+
+        Entity<User> list = Entity.entity(user, MediaType.APPLICATION_JSON);
+        Response response = target.request().accept(MediaType.APPLICATION_JSON).header("Content-Type", MediaType.APPLICATION_JSON).post(list);
+
         status(response);
+        User u = response.readEntity(User.class);
+        System.out.println(u);
         return response;
     }
 

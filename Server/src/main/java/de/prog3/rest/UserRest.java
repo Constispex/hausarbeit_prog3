@@ -37,10 +37,11 @@ public class UserRest {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getLoginData(Object o, @Context UriInfo uriInfo) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLoginData(User u, @Context UriInfo uriInfo) {
         System.out.println("getLoginData");
-        System.out.println(o.toString());
-        return Response.ok(o).build();
+        System.out.println(u.toString());
+        return Response.ok(new User("Ad", "asdf", true)).build();
     }
 
     @GET
