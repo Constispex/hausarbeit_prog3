@@ -8,7 +8,6 @@ module de.prog3.client {
     requires javafx.fxml;
     requires javafx.controls;
 
-    requires genson;
 
     requires java.logging;
     requires java.xml.bind;
@@ -16,11 +15,10 @@ module de.prog3.client {
     requires com.google.gson;
     requires hausarbeit.prog3.Common.main;
 
-    requires jersey.hk2;
 
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.core;
-    requires jersey.media.json.jackson;
+
     requires org.glassfish.jaxb.runtime;
 
     opens de.prog3.client.controller to javafx.fxml;
