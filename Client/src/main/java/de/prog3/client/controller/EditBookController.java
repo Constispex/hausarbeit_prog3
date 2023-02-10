@@ -1,8 +1,9 @@
 package de.prog3.client.controller;
 
 import de.prog3.client.handler.DbmsClient;
-import de.prog3.client.model.Book;
 import de.prog3.client.model.BookHolder;
+import de.prog3.common.Book;
+import de.prog3.common.QueryBuilder;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -37,7 +38,7 @@ public class EditBookController {
         input_title.setText(currBook.getTitle());
         input_author.setText(currBook.getAuthor());
         input_publisher.setText(currBook.getPublisher());
-        input_rating.setText(currBook.getRating());
+        input_rating.setText(String.valueOf(currBook.getRating()));
         input_subareas.setText(currBook.getSubareas());
     }
 
@@ -53,17 +54,18 @@ public class EditBookController {
      * Bearbeitet das ausgewählte Buch und schickt eine Query an den Server.
      */
     public void editBook() {
-        String sqlQuery = "UPDATE Buecher SET " +
-                "title = '" + input_title.getText() + "', " +
-                "author = '" + input_author.getText() + "', " +
-                "publisher = '" + input_publisher.getText() + "', " +
-                "rating = '" + input_rating.getText() + "', " +
-                "subareas = '" + input_subareas.getText() + "' " +
-                "WHERE title = '" + currBook.getTitle() + "'";
-        Response response = dbmsClient.post("/sqlquery", sqlQuery);
+        Book curr = new Book();
+        curr.setTitle(input_title.getText());
+        curr.setAuthor(input_author.getText());
+        curr.setPublisher(input_publisher.getText());
+        curr.setRating(input_rating.getText());
+        curr.setSubareas(input_subareas.getText());
+
+        Response response = dbmsClient.postQuery(new QueryBuilder().buildUpdate(curr, currBook.getTitle()), "/sqlquery");
         label_error.setText(response.getStatusInfo().getReasonPhrase());
         if (response.getStatus() == 200) {
             label_error.setText("Bearbeiten war erfolgreich");
         }
+        response.close();
     }
 }

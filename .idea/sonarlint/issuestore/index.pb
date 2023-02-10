@@ -16,3 +16,7 @@ w
 G.idea/sonarlint/issuestore/f/b/fbe448ebfc3eb2d4e308f6b8b043666f5b57235e,5\2\52114fdaa426e9b83a3c5df4e11c4f0ebbcd814b
 w
 G.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,e\d\ed67eb178d523a4b3f117dcbe0eda5196367ceec
+<
+build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
+C
+Server/build.gradle,5\1\517b060a70b251df04ba6cb5d7f55bfb6be1b7a2

@@ -24,28 +24,20 @@ public class Query {
     @JsonProperty("orderBy")
     String orderBy;
 
-    public String getInsertIntoContent() {
-        return insertIntoContent;
-    }
-
-    public void setInsertIntoContent(String insertIntoContent) {
-        this.insertIntoContent = insertIntoContent;
-    }
-
-    public boolean isInsertInto() {
-        return insertInto;
-    }
-
-    public void setInsertInto(boolean insertInto) {
-        this.insertInto = insertInto;
-    }
-
     public String getSelect() {
         return select;
     }
 
     public void setSelect(String select) {
         this.select = select;
+    }
+
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
     }
 
     public boolean isUpdate() {
@@ -64,12 +56,28 @@ public class Query {
         this.updateContent = updateContent;
     }
 
-    public boolean isDelete() {
-        return delete;
+    public boolean isInsertInto() {
+        return insertInto;
     }
 
-    public void setDelete(boolean delete) {
-        this.delete = delete;
+    public void setInsertInto(boolean insertInto) {
+        this.insertInto = insertInto;
+    }
+
+    public String getInsertIntoContent() {
+        return insertIntoContent;
+    }
+
+    public void setInsertIntoContent(String insertIntoContent) {
+        this.insertIntoContent = insertIntoContent;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
     }
 
     public String getWhere() {
@@ -86,14 +94,6 @@ public class Query {
 
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
     }
 
     @Override

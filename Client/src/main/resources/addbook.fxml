@@ -11,68 +11,66 @@
         <VBox.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
         </VBox.margin>
-        <children>
-            <TextField fx:id="input_title" alignment="TOP_LEFT" layoutX="117.0" layoutY="12.0" prefHeight="34.0"
-                       prefWidth="231.0">
-                <font>
-                    <Font size="18.0"/>
-                </font>
-            </TextField>
-            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="13.0" layoutY="14.0" prefHeight="34.0"
-                   prefWidth="103.0" text="Titel:">
-                <font>
-                    <Font name="System Bold" size="18.0"/>
-                </font>
-            </Label>
-            <TextField fx:id="input_author" alignment="TOP_LEFT" layoutX="117.0" layoutY="67.0" prefHeight="60.0"
-                       prefWidth="231.0">
-                <font>
-                    <Font size="18.0"/>
-                </font>
-            </TextField>
-            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="69.0" prefHeight="34.0"
-                   prefWidth="103.0" text="Autor/en:">
-                <font>
-                    <Font name="System Bold" size="18.0"/>
-                </font>
-            </Label>
-            <TextField fx:id="input_publisher" alignment="TOP_LEFT" layoutX="117.0" layoutY="143.0" prefHeight="60.0"
-                       prefWidth="231.0">
-                <font>
-                    <Font size="18.0"/>
-                </font>
-            </TextField>
-            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="143.0" prefHeight="34.0"
-                   prefWidth="103.0" text="Verlag:">
-                <font>
-                    <Font name="System Bold" size="18.0"/>
-                </font>
-            </Label>
-            <TextField fx:id="input_rating" alignment="TOP_LEFT" layoutX="117.0" layoutY="222.0" prefHeight="34.0"
-                       prefWidth="231.0">
-                <font>
-                    <Font size="18.0"/>
-                </font>
-            </TextField>
-            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="222.0" prefHeight="34.0"
-                   prefWidth="103.0" text="Bewertung:">
-                <font>
-                    <Font name="System Bold" size="18.0"/>
-                </font>
-            </Label>
-            <TextField fx:id="input_subareas" alignment="TOP_LEFT" layoutX="117.0" layoutY="278.0" prefHeight="60.0"
-                       prefWidth="231.0">
-                <font>
-                    <Font size="18.0"/>
-                </font>
-            </TextField>
-            <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="13.0" layoutY="280.0" prefHeight="34.0"
-                   prefWidth="103.0" text="Teilgebiete:">
-                <font>
-                    <Font name="System Bold" size="18.0"/>
-                </font>
-            </Label>
-        </children>
+        <TextField fx:id="input_title" alignment="TOP_LEFT" layoutX="117.0" layoutY="12.0" prefHeight="34.0"
+                   prefWidth="231.0">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </TextField>
+        <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="13.0" layoutY="14.0" prefHeight="34.0"
+               prefWidth="103.0" text="Titel:">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="input_author" alignment="TOP_LEFT" layoutX="117.0" layoutY="67.0" prefHeight="60.0"
+                   prefWidth="231.0">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </TextField>
+        <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="69.0" prefHeight="34.0"
+               prefWidth="103.0" text="Autor/en:">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="input_publisher" alignment="TOP_LEFT" layoutX="117.0" layoutY="143.0" prefHeight="60.0"
+                   prefWidth="231.0">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </TextField>
+        <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="143.0" prefHeight="34.0"
+               prefWidth="103.0" text="Verlag:">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="input_rating" alignment="TOP_LEFT" layoutX="117.0" layoutY="222.0" prefHeight="34.0"
+                   prefWidth="231.0">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </TextField>
+        <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="222.0" prefHeight="34.0"
+               prefWidth="103.0" text="Bewertung:">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="input_subareas" alignment="TOP_LEFT" layoutX="117.0" layoutY="278.0" prefHeight="60.0"
+                   prefWidth="231.0">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </TextField>
+        <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="13.0" layoutY="280.0" prefHeight="34.0"
+               prefWidth="103.0" text="Teilgebiete:">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
     </Pane>
     <BorderPane prefHeight="41.0" prefWidth="400.0">
         <left>

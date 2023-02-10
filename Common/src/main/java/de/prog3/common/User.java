@@ -3,6 +3,8 @@ package de.prog3.common;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 /**
  * Speichert Name und Passwort und Adminrechte von einem Benutzer.
  */
@@ -19,7 +21,7 @@ public class User {
     }
 
     /**
-     * Constuctor zum setzten der Werte
+     * Constructor zum setzten der Werte
      *
      * @param name     Username
      * @param password Password
@@ -62,5 +64,18 @@ public class User {
                 ", password='" + password + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(name, user.name) && Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, password);
     }
 }

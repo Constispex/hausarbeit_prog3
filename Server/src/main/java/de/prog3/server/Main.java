@@ -20,6 +20,7 @@ public class Main {
     public static void main(String[] args) throws IOException, URISyntaxException {
         final String BASE_URI = "http://localhost:8080/rest";
         Logger.getLogger("org.glassfish").setLevel(Level.ALL);
+        Logger.getAnonymousLogger().setLevel(Level.ALL);
 
         URI baseURI = new URI(BASE_URI);
         ResourceConfig config =

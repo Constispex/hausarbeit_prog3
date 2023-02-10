@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static de.prog3.client.handler.DbmsClient.createJson;
 
 /**
  * Der Controller verwaltet die Eingabe von Username und Passwort.
@@ -51,13 +50,13 @@ public class SignInController {
             text_password.clear();
         } else {
             System.out.printf("Username: %s \t Password: %s%n", username, password);
-            User u = new User(username, password, false);
+            setCurrentUser(new User(username, password, false));
             final String BASE_URI = "http://localhost:8080/rest";
 
             DbmsClient dbmsClient = new DbmsClient(BASE_URI);
-            System.out.println("create json as string" + createJson(u));
-            Response response = dbmsClient.get(createJson(u), "/register");
-            System.out.println(response.getStatusInfo());
+
+            Response response = dbmsClient.validateUser(getCurrentUser(), "/register");
+
             switch (response.getStatus()) {
                 case 406 -> { // not Acceptable
                     label_error.setText("wrong password or user does not exist");
@@ -70,10 +69,8 @@ public class SignInController {
                     Stage stage = (Stage) button_submit.getScene().getWindow();
                     stage.close();
 
-
-                    boolean isAdmin = response.readEntity(boolean.class);
-
-                    setCurrentUser(new User(username, password, isAdmin));
+                    setCurrentUser(response.readEntity(User.class));
+                    System.out.println(getCurrentUser().toString());
 
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/overview.fxml"));
                     Scene secondScene;

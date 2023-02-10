@@ -2,12 +2,12 @@ package de.prog3.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.prog3.common.User;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * Die Klasse verwaltet alle Anfragen die auf die Adresse "/register" kommen
  */
-
 @Path("/register")
 public class UserRest {
     static ObjectMapper mapper = new ObjectMapper();
@@ -34,21 +33,22 @@ public class UserRest {
         users.add(normal);
     }
 
-
+    /**
+     * Bekommt einen User vom Client und überprüft, ob dieser auf dem Restserver liegt.
+     * Wenn ja, wird dieser wieder zurückgeschickt
+     *
+     * @param user der User, der vom Client gesendet wurde
+     * @return Response mit dem user, falls dieser existiert.
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getLoginData(User u, @Context UriInfo uriInfo) {
-        System.out.println("getLoginData");
-        System.out.println(u.toString());
-        return Response.ok(new User("Ad", "asdf", true)).build();
-    }
-
-    @GET
-    @Path("{login}")
-    @Produces("application/json")
-    public Response getUserLogIn(@PathParam("login") JSONObject login) {
-
-        return Response.ok(login, MediaType.APPLICATION_JSON).build();
+    public Response getLoginData(User user) {
+        for (User u : users) {
+            if (u.equals(user)) {
+                return Response.ok(u).build();
+            }
+        }
+        return Response.notAcceptable(null).build();
     }
 }
