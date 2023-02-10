@@ -1,7 +1,8 @@
 package de.prog3.client.controller;
 
 import de.prog3.client.handler.DbmsClient;
-import de.prog3.client.model.Book;
+import de.prog3.common.Book;
+import de.prog3.common.QueryBuilder;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -46,17 +47,18 @@ public class AddBookController {
                 return;
             }
             if (rating > 0 && rating <= 5) {
-                Response response = dbmsClient.post("/sqlquery", "INSERT INTO buecher (Title, Author, Publisher, Rating, Subareas) VALUES (" + b.toSqlQuery(b) + ");");
-
+                Response response = dbmsClient.postQuery(new QueryBuilder().buildAdd(b), "/sqlquery");
                 label_error.setText(response.getStatusInfo().getReasonPhrase());
                 if (response.getStatus() == 200) {
                     label_error.setText("Hinzufügen erfolgreich");
                 }
+                response.close();
             } else {
                 label_error.setText("Rating muss zwischen 1 und 5 sein");
             }
         } else {
             label_error.setText("please enter at least the title");
         }
+
     }
 }

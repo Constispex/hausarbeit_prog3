@@ -1,4 +1,4 @@
-package de.prog3.client.model;
+package de.prog3.common;
 
 /**
  * Die Buchklasse speichert alle wichtigen Informationen zu einem Buch. So können die Daten des Servers beim Client
@@ -11,6 +11,17 @@ public class Book {
     private String rating;
     private String subareas;
 
+    public Book() {
+    }
+
+    public Book(String title, String author, String publisher, String rating, String subareas) {
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.rating = rating;
+        this.subareas = subareas;
+    }
+
     /**
      * Gibt alle Attribute zurück, fürs Einfügen in eine SQL Query
      * Reihenfolge: Titel, Autor, Publisher, Rating, Subareas
@@ -22,7 +33,7 @@ public class Book {
         return addQuotes(b.title) + ", " +
                 addQuotes(b.author) + ", " +
                 addQuotes(b.publisher) + ", " +
-                addQuotes(b.rating) + ", " +
+                addQuotes(String.valueOf(b.rating)) + ", " +
                 addQuotes(b.subareas);
     }
 
