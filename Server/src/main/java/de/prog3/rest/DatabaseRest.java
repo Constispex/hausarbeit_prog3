@@ -7,10 +7,11 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -19,6 +20,7 @@ import java.util.Scanner;
  */
 @Path("/sqlquery")
 public class DatabaseRest {
+    private static final Logger logger = LogManager.getLogger(DatabaseRest.class);
     /**
      * Die Methode wartet auf eine SQL Query und gibt das Ergebnis zurück. Zudem wird die Query in der Konsole ausgegeben
      *
@@ -29,8 +31,7 @@ public class DatabaseRest {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getSqlQuery(String res) {
-        System.out.printf("[%s]: Query: %s%n",
-                new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()), res);
+        logger.info("Query executed: {}", res);
         ResultSet rs = DbConnection.execute(res);
         if (!res.contains("SELECT")) return Response.ok().build();
 
@@ -39,7 +40,7 @@ public class DatabaseRest {
             rs.close();
             return Response.ok(result).build();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
             return Response.serverError().build();
         }
     }

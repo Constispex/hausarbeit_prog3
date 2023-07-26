@@ -1,5 +1,8 @@
 package de.prog3.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.DriverManager;
@@ -15,6 +18,7 @@ import java.util.Scanner;
  */
 public class DbConnection {
 
+    private static final Logger logger = LogManager.getLogger(DbConnection.class);
     private static final String CURR_DATABASE = "Informatik";
 
     /**
@@ -36,14 +40,15 @@ public class DbConnection {
             statement.closeOnCompletion();
             return statement.executeQuery(res);
         } catch (SQLException e) {
-            System.err.println("Error in execute: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error in Query {}", e.getMessage());
+
         } finally {
             try {
                 Objects.requireNonNull(statement).close();
             } catch (SQLException e) {
-                System.err.println("Error in execute: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Error in Query {}", e.getMessage());
+            } catch (NullPointerException e) {
+                logger.error("Connection not found: {}", e.getMessage());
             }
         }
         return null;
@@ -55,13 +60,13 @@ public class DbConnection {
      * @param database Die Datenbank, die verwendet wird
      * @return Datenbankverbindung
      */
-    public static java.sql.Connection getConnection(String database) {
+    public static java.sql.Connection getConnection(String database) throws NullPointerException{
         java.sql.Connection con = null;
         try {
             con = DriverManager.getConnection(
                     "jdbc:mariadb://localhost:3306/" + database, "root", "");
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         Objects.requireNonNull(con);
         return con;
@@ -89,7 +94,8 @@ public class DbConnection {
                     String next = scanner.nextLine();
                     if (next.contains(";")) {
                         query.append(next);
-                        System.out.println("execute: " + query);
+                        logger.info("Query executed");
+                        logger.debug("Query: {}", query);
                         stCreateAndInsert.execute(query.toString());
                         query = new StringBuilder();
                     } else {
@@ -105,7 +111,7 @@ public class DbConnection {
      *
      * @throws SQLException Wirft eine Fehlermeldung, falls die Anfrage falsch ist, oder es einen Fehler mit der Datenbank gibt
      */
-    private static void createDatabase() throws SQLException {
+    private static void createDatabase() throws SQLException, NullPointerException {
         Statement statement = null;
         String sql = "CREATE DATABASE IF NOT EXISTS " + CURR_DATABASE;
         try {
@@ -135,7 +141,7 @@ public class DbConnection {
             }
 
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return sb.toString();
     }
@@ -150,13 +156,13 @@ public class DbConnection {
             createDatabase();
             createTable();
         } catch (SQLException e) {
-            System.err.println("Error while setting up Database");
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error while setting up Database: {}", e.getMessage());
             return false;
         } catch (IOException e) {
-            System.err.println("sql file not found");
-            System.err.println(e.getMessage());
+            logger.error("sql file not found {}", e.getMessage());
+            return false;
+        } catch (NullPointerException e) {
+            logger.error("Connection not found: {}", e.getMessage());
             return false;
         }
         return true;

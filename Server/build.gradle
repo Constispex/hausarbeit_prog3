@@ -1,5 +1,5 @@
 application {
-    mainClass = "${group}.${project.name.toLowerCase()}.Main"
+    mainClass = "${group}.Server"
 }
 
 jar {
@@ -10,6 +10,12 @@ jar {
     }
 }
 
+ext {
+    log4jVersion = '2.20.0'
+    jacksonVersion = '2.14.2'
+
+}
+
 dependencies {
 
     implementation "org.glassfish.jersey.core:jersey-server:${jerseyVersion}"
@@ -17,6 +23,11 @@ dependencies {
     implementation "org.glassfish.grizzly:grizzly-http-server:${grizzlyVersion}"
     implementation "org.glassfish.grizzly:grizzly-websockets:${grizzlyVersion}"
     implementation "org.glassfish.jersey.containers:jersey-container-grizzly2-http:${jerseyVersion}"
+
+    implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
 
     implementation "org.mariadb.jdbc:mariadb-java-client:${jdbcVersion}"
