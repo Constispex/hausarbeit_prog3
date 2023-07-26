@@ -9,7 +9,7 @@ public class User {
     private final boolean isAdmin;
 
     /**
-     * Constuctor zum setzten der Werte
+     * Constructor zum setzten der Werte
      *
      * @param name     Username
      * @param password Password

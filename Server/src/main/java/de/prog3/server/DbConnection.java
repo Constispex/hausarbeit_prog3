@@ -22,7 +22,7 @@ public class DbConnection {
     private static final String CURR_DATABASE = "Informatik";
 
     /**
-     * privater Constructor, da die Klasse nur aus static Methoden besteht und diese Klasse nicht instanziert werden soll
+     * privater Constructor, da die Klasse nur aus static Methoden besteht und diese Klasse nicht instanziiert werden soll
      */
     private DbConnection() {
     }
@@ -69,6 +69,7 @@ public class DbConnection {
             logger.error(e.getMessage());
         }
         Objects.requireNonNull(con);
+
         return con;
     }
 

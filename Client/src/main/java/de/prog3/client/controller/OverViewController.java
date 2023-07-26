@@ -11,9 +11,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
+
 
 /**
  * Die Klasse ist der Controller vom DBMS. Hier werden Methoden ausgeführt fürs Löschen und anzeigen der Datenbank.
@@ -53,12 +56,13 @@ public class OverViewController {
     @FXML
     public Button admin_add;
 
+    private static final Logger logger = LogManager.getLogger(OverViewController.class.getName());
     private static final List<String> selectedCols = new ArrayList<>();
     private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
     private StringBuilder select;
     private StringBuilder where;
     private StringBuilder orderBy;
-    private final String SERVER_ADDRESS = "/sqlquery";
+    private static final String SERVER_ADDRESS = "/sqlquery";
 
     /**
      * Erstellt ein Buch mit den Inhalten der Spalten
@@ -76,10 +80,9 @@ public class OverViewController {
                 case "publisher" -> b.setPublisher(column[i]);
                 case "rating" -> b.setRating(column[i]);
                 case "subareas" -> b.setSubareas(column[i]);
-                default -> System.err.println("no columns detected");
+                default -> logger.error("no columns detected");
             }
         }
-        System.out.println(b);
         return b;
     }
 
@@ -102,7 +105,7 @@ public class OverViewController {
         try {
             logInScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         Stage logInWindow = new Stage();
         logInWindow.setScene(logInScene);
@@ -135,7 +138,6 @@ public class OverViewController {
                 label_error.setText(String.valueOf(response.getStatusInfo()));
                 String table = response.readEntity(String.class);
                 setResultTable(table);
-                System.out.println(table);
                 label_error.setText(response.getStatus() == 100 ?
                         response.getStatusInfo().getReasonPhrase() : String.valueOf(response.getStatusInfo()));
                 orderBy = new StringBuilder();
@@ -271,7 +273,7 @@ public class OverViewController {
         try {
             editBookScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         Stage editBookStage = new Stage();
         editBookStage.setScene(editBookScene);
@@ -333,7 +335,7 @@ public class OverViewController {
         try {
             logInScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         Stage logInWindow = new Stage();
         logInWindow.setScene(logInScene);

@@ -19,25 +19,32 @@ public class Server {
     private static final Logger logger = LogManager.getLogger(Server.class);
 
     public static void main(String[] args) {
-        final Level LOGLEVEL = Level.ALL;
+
+        final Level loglevel = Level.getLevel(String.valueOf(getLevel(args[0])));
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
         Configuration config = context.getConfiguration();
         LoggerConfig loggerConfig =
                 config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
-        loggerConfig.setLevel(LOGLEVEL);
+        loggerConfig.setLevel(loglevel);
         context.updateLoggers();
 
 
-        logger.info("Nutzer-Info");
-        logger.debug("Nutzer-Debug");
-        logger.warn("Nutzer-Warnung");
-        logger.error("Nutzer-Fehler");
-        logger.fatal("Nutzer-Fatal");
 
         try {
             Main.main(args);
         } catch (IOException | URISyntaxException e) {
             logger.fatal("Server konnte nicht gestartet werden: {}", e.getMessage());
         }
+    }
+
+    private static Level getLevel(String arg) {
+        return switch (arg) {
+            case "info" -> Level.INFO;
+            case "debug" -> Level.DEBUG;
+            case "warn" -> Level.WARN;
+            case "error" -> Level.ERROR;
+            case "fatal" -> Level.FATAL;
+            default -> Level.ALL;
+        };
     }
 }

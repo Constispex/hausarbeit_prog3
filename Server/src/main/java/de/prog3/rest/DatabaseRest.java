@@ -31,7 +31,10 @@ public class DatabaseRest {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getSqlQuery(String res) {
-        logger.info("Query executed: {}", res);
+        Scanner n = new Scanner(res);
+        String log = n.next() + " " + n.next();
+        n.close();
+        logger.debug("Query executed: {}", log);
         ResultSet rs = DbConnection.execute(res);
         if (!res.contains("SELECT")) return Response.ok().build();
 

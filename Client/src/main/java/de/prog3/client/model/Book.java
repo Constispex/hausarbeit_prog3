@@ -12,7 +12,7 @@ public class Book {
     private String subareas;
 
     /**
-     * Gibt alle Attribute zurück, fürs einfügen in eine SQL Query
+     * Gibt alle Attribute zurück, fürs Einfügen in eine SQL Query
      * Reihenfolge: Titel, Autor, Publisher, Rating, Subareas
      *
      * @param b Das Buch, welches umgewandelt werden soll

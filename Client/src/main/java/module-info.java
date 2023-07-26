@@ -6,7 +6,8 @@ module de.prog3.client {
     requires javafx.graphics;
     requires javafx.fxml;
     requires javafx.controls;
-    requires java.logging;
+    requires org.apache.logging.log4j.core;
+    requires org.apache.logging.log4j;
 
     opens de.prog3.client.controller to javafx.fxml;
     opens de.prog3.client.application to javafx.fxml;

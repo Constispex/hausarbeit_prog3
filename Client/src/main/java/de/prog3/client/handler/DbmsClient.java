@@ -8,7 +8,8 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Die Klasse übersetzt die Eingaben des Clients und macht sie für den Server
@@ -16,6 +17,7 @@ import java.util.logging.Logger;
  */
 public class DbmsClient {
     private final Client client;
+    private final Logger logger = LogManager.getLogger(DbmsClient.class.getName());
     private final String baseURI;
 
     /**
@@ -74,18 +76,19 @@ public class DbmsClient {
             if (select.toString().equals("SELECT ")) select.append(" *");
             if (sortBy == null) sortBy = new StringBuilder();
             WebTarget target = getTarget("POST", uri);
-            Entity<String> entity = Entity.entity(select + " FROM Buecher " + where + sortBy, MediaType.TEXT_PLAIN);
+            Entity<String> entity = Entity.entity(select + " FROM buecher " + where + sortBy, MediaType.TEXT_PLAIN);
             response = target.request().post(entity);
 
             return response;
         } catch (NullPointerException e) {
-            Logger.getLogger(e.getMessage());
+            logger.error(e.getMessage());
             return Response.status(100, "Bitte setzte erst den Filter, bevor du sortierst!").build();
         }
     }
 
     private WebTarget getTarget(String crud, String uri) {
-        System.out.printf("%n--- %s %s%s%n", crud, baseURI, uri);
+        String log = String.format("%s %s%s", crud, baseURI, uri);
+        logger.info(log);
         return client.target(baseURI + uri);
     }
 
@@ -93,12 +96,11 @@ public class DbmsClient {
      * Dient zum Überprüfen des Statuses. Dieser wird in der Konsole ausgegeben
      *
      * @param response die Serverantwort
-     * @return gibt den Statuscode zurück
      */
-    private int status(Response response) {
+    private void status(Response response) {
         int code = response.getStatus();
         String reason = response.getStatusInfo().getReasonPhrase();
-        System.out.printf("Status: %d %s%n", code, reason);
-        return code;
+        String log = String.format("HTTP Status: %d %s", code, reason);
+        logger.info(log);
     }
 }

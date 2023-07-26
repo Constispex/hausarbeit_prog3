@@ -52,7 +52,7 @@ public class EditBookController {
      * Bearbeitet das ausgewählte Buch und schickt eine Query an den Server.
      */
     public void editBook() {
-        String sqlQuery = "UPDATE Buecher SET " +
+        String sqlQuery = "UPDATE buecher SET " +
                 "title = '" + input_title.getText() + "', " +
                 "author = '" + input_author.getText() + "', " +
                 "publisher = '" + input_publisher.getText() + "', " +

@@ -30,7 +30,6 @@ public class Main {
     public static void main(String[] args) throws IOException, URISyntaxException {
         final String BASE_URI = "http://localhost:8080/rest";
 
-
         URI baseURI = new URI(BASE_URI);
         ResourceConfig config =
                 ResourceConfig.forApplicationClass(DataBaseApplication.class);
@@ -53,6 +52,7 @@ public class Main {
 
         logger.info("Enter stops the server");
         System.in.read();
+        logger.info("Server stopped");
         server.shutdownNow();
 
     }

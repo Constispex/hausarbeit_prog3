@@ -48,7 +48,6 @@ public class SignInController {
             label_error.setText("please enter a name and a password");
             text_password.clear();
         } else {
-            System.out.printf("Username: %s \t Password: %s%n", username, password);
             User u = new User(username, password, false);
             final String BASE_URI = "http://localhost:8080/rest";
 
