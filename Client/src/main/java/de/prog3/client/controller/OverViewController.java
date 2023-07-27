@@ -84,7 +84,7 @@ public class OverViewController {
         try {
             logInScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            label_error.setText(e.getMessage());
         }
         Stage logInWindow = new Stage();
         logInWindow.setScene(logInScene);
@@ -119,7 +119,7 @@ public class OverViewController {
                 label_error.setText(String.valueOf(response.getStatusInfo()));
                 LinkedList<LinkedHashMap<String, String>> table = response.readEntity(LinkedList.class);
                 setResultTable(table);
-                System.out.println(table);
+
                 label_error.setText(response.getStatus() == 100 ?
                         response.getStatusInfo().getReasonPhrase() : String.valueOf(response.getStatusInfo()));
                 orderBy = new StringBuilder();
@@ -232,7 +232,7 @@ public class OverViewController {
                     case "publisher" -> book.setPublisher(map.get(s));
                     case "rating" -> book.setRating(map.get(s));
                     case "subareas" -> book.setSubareas(map.get(s));
-                    default -> System.err.println("no cols found!");
+                    default -> label_error.setText("Error! Column not found");
                 }
             }
             table_result.getItems().add(book);
@@ -252,7 +252,7 @@ public class OverViewController {
         try {
             editBookScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            label_error.setText(e.getMessage());
         }
         Stage editBookStage = new Stage();
         editBookStage.setScene(editBookScene);
@@ -316,7 +316,7 @@ public class OverViewController {
         try {
             logInScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            label_error.setText(e.getMessage());
         }
         Stage logInWindow = new Stage();
         logInWindow.setScene(logInScene);

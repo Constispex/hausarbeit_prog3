@@ -10,20 +10,17 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Die Klasse verarbeitet Client Anfragen, die auf die Adresse "sqlquery" geleitet werden
  */
 @Path("/sqlquery")
 public class DatabaseRest {
-    private static final Logger logger = LogManager.getLogger(DatabaseRest.class);
 
     /**
      * Methode bekommt eine SQL Query, führte diese aus und schickt eine LinkedList mit den Büchern an den Client zurück
@@ -36,7 +33,6 @@ public class DatabaseRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSqlQuery(Query query) {
         String sql = new QueryBuilder().createSql(query);
-        System.out.printf("[%s]: Query: %s%n", new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()), sql);
 
         if (query.isDelete() || query.isUpdate() || query.isInsertInto()) {
             DbConnection.execute(sql);
@@ -44,7 +40,6 @@ public class DatabaseRest {
         }
         LinkedList<Book> books = DbConnection.getList(sql, getColumns(sql));
 
-        System.out.printf("[%s]: Sent %s books%n", new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()), books.size());
         return Response.ok(books).build();
     }
 

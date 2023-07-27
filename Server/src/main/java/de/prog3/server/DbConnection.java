@@ -21,7 +21,7 @@ import java.util.Scanner;
  */
 public class DbConnection {
 
-    private static final Logger logger = LogManager.getLogger(DbConnection.class);
+    private static final Logger logger = LogManager.getRootLogger();
     private static final String CURR_DATABASE = "Informatik";
 
     /**
@@ -140,30 +140,6 @@ public class DbConnection {
                 }
             }
         }
-    }
-
-    /**
-     * Wandelt das ResultSet in einen String um, der dann an der Client geschickt wird.
-     *
-     * @param rs      das ResultSet, welches umgewandelt wird
-     * @param columns die Anzahl an Spalten
-     * @return ResultSet mit folgender Regex: "Zeile1Spalte1; Zeile1Spalte2; ... ; // Zeile2Spalte1; Zeile2Spalte2; ..."
-     */
-    public static String rsToString(ResultSet rs, int columns) {
-        StringBuilder sb = new StringBuilder();
-
-        try {
-            while (rs.next()) {
-                for (int i = 1; i <= columns; i++) {
-                    sb.append(rs.getString(i)).append("; ");
-                }
-                sb.append("// ");
-            }
-
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-        return sb.toString();
     }
 
     /**

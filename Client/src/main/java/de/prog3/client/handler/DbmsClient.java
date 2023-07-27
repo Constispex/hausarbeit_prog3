@@ -8,6 +8,8 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -15,6 +17,8 @@ import jakarta.ws.rs.core.Response;
  * verständlich.
  */
 public class DbmsClient {
+
+    private static final Logger logger = LogManager.getRootLogger();
     private final Client client;
     private final String baseURI;
 
@@ -35,13 +39,12 @@ public class DbmsClient {
      * @return Response, ob User existiert
      */
     public Response validateUser(User user, String uri) {
-        WebTarget target = getTarget("POST", uri);
-        System.out.printf("send: %s%n", user);
+        WebTarget target = getTarget(uri);
 
         Entity<User> list = Entity.entity(user, MediaType.APPLICATION_JSON);
         Response response = target.request().post(list);
 
-        status(response);
+        status("POST User", response);
         return response;
     }
 
@@ -53,18 +56,18 @@ public class DbmsClient {
      * @return Response mit Status
      */
     public Response postQuery(Query query, String uri) {
-        WebTarget target = getTarget("POST", uri);
-        System.out.printf("send: %s%n", query.toString());
+        WebTarget target = getTarget(uri);
+
 
         Entity<Query> list = Entity.entity(query, MediaType.APPLICATION_JSON);
         Response response = target.request().post(list);
 
-        status(response);
+        status("POST Query", response);
         return response;
     }
 
-    private WebTarget getTarget(String crud, String uri) {
-        System.out.printf("%n--- %s %s%s%n", crud, baseURI, uri);
+    private WebTarget getTarget(String uri) {
+        logger.debug("Client: {} {}", "POST", uri);
         return client.target(baseURI + uri);
     }
 
@@ -73,9 +76,9 @@ public class DbmsClient {
      *
      * @param response die Serverantwort
      */
-    private void status(Response response) {
+    private void status(String crud, Response response) {
         int code = response.getStatus();
         String reason = response.getStatusInfo().getReasonPhrase();
-        System.out.printf("Status: %d %s\t%s%n", code, reason, response.getHeaders());
+        logger.debug("Status: {} {} {}", crud, code, reason);
     }
 }

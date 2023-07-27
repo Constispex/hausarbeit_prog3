@@ -49,7 +49,6 @@ public class SignInController {
             label_error.setText("please enter a name and a password");
             text_password.clear();
         } else {
-            System.out.printf("Username: %s \t Password: %s%n", username, password);
             setCurrentUser(new User(username, password, false));
             final String BASE_URI = "http://localhost:8080/rest";
 
@@ -70,15 +69,15 @@ public class SignInController {
                     stage.close();
 
                     setCurrentUser(response.readEntity(User.class));
-                    System.out.println(getCurrentUser().toString());
+
 
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/overview.fxml"));
                     Scene secondScene;
                     try {
                         secondScene = new Scene(fxmlLoader.load());
                     } catch (IOException e) {
-                        System.err.println("FXML File not found");
-                        throw new RuntimeException(e);
+                        label_error.setText("FXML File not found");
+                        return;
                     }
                     Stage mainWindow = new Stage();
                     mainWindow.setScene(secondScene); // set the scene

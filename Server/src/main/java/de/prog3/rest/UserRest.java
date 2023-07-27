@@ -6,14 +6,10 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +19,7 @@ import java.util.List;
  */
 @Path("/register")
 public class UserRest {
-    private static final Logger logger = LogManager.getLogger(UserRest.class);
+    private static final Logger logger = LogManager.getRootLogger();
     private final List<User> users = new ArrayList<>();
 
     /**
@@ -50,10 +46,9 @@ public class UserRest {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLoginData(User user) {
-        logger.debug("User {} tries to log in", user.getName());
         for (User u : users) {
             if (u.equals(user)) {
-                logger.debug("User {} logged in", user.getName());
+                logger.info("User {} logged in", user.getName());
                 return Response.ok(u).build();
             }
         }

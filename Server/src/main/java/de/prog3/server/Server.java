@@ -19,7 +19,7 @@ import java.net.URISyntaxException;
  * Mit Enter kann der Server wieder gestoppt werden.
  */
 public class Server {
-    private static final Logger logger = LogManager.getLogger(Server.class);
+    private static final Logger logger = LogManager.getRootLogger();
     /**
      * Startet den Server und überprüft die Datenbankverbindung
      *
