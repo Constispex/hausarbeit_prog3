@@ -1,5 +1,6 @@
 package de.prog3.client.handler;
 
+import de.prog3.common.Query;
 import de.prog3.common.User;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -7,10 +8,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.json.JSONObject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Die Klasse übersetzt die Eingaben des Clients und macht sie für den Server
@@ -18,9 +16,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class DbmsClient {
     private final Client client;
-    private final Logger logger = LogManager.getLogger(DbmsClient.class.getName());
     private final String baseURI;
-    public static final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Setzt die URI und den Client
@@ -35,16 +31,18 @@ public class DbmsClient {
     /**
      * Schickt Username und Passwort an den Server. Die Eingaben werden per ":" getrennt
      *
-     * @param uri  die Zieladresse
-     * @param user Der User, der sich anmelden möchte
+     * @param uri die Zieladresse
      * @return Response, ob User existiert
      */
-    public Response post(String uri, User user) {
+    public Response validateUser(User user, String uri) {
         WebTarget target = getTarget("POST", uri);
-        String login = user.getName() + ":" + user.getPassword(); // syntax = username:password
-        Entity<String> entity = Entity.entity(login, MediaType.TEXT_PLAIN);
+        System.out.printf("send: %s%n", user);
 
-        return target.request().post(entity);
+        Entity<User> list = Entity.entity(user, MediaType.APPLICATION_JSON);
+        Response response = target.request().post(list);
+
+        status(response);
+        return response;
     }
 
     /**
@@ -54,44 +52,19 @@ public class DbmsClient {
      * @param query die zu schickende SQL Query
      * @return Response mit Status
      */
-    public Response post(String uri, String query) {
+    public Response postQuery(Query query, String uri) {
         WebTarget target = getTarget("POST", uri);
-        Entity<String> entity = Entity.entity(query, MediaType.APPLICATION_JSON);
-        System.out.println(entity);
-        Response response = target.request().post(entity);
-        status(response);
+        System.out.printf("send: %s%n", query.toString());
 
+        Entity<Query> list = Entity.entity(query, MediaType.APPLICATION_JSON);
+        Response response = target.request().post(list);
+
+        status(response);
         return response;
     }
 
-    /**
-     * Schickt eine SELECT Anfrage an den Server. Der Server schickt dann das Ergebnis zurück.
-     *
-     * @param uri    die Zieladresse
-     * @param select der SELECT Teil der Anfrage
-     * @param where  der WHERE Teil der Anfrage
-     * @param sortBy der SORT BY Teil der Anfrage
-     * @return Response mit SELECT Ergebnis
-     */
-    public Response post(String uri, StringBuilder select, StringBuilder where, StringBuilder sortBy) {
-        Response response;
-        try {
-            if (select.toString().equals("SELECT ")) select.append(" *");
-            if (sortBy == null) sortBy = new StringBuilder();
-            WebTarget target = getTarget("POST", uri);
-            Entity<String> entity = Entity.entity(select + " FROM buecher " + where + sortBy, MediaType.TEXT_PLAIN);
-            response = target.request().post(entity);
-
-            return response;
-        } catch (NullPointerException e) {
-            logger.error(e.getMessage());
-            return Response.status(100, "Bitte setzte erst den Filter, bevor du sortierst!").build();
-        }
-    }
-
     private WebTarget getTarget(String crud, String uri) {
-        String log = String.format("%s %s%s", crud, baseURI, uri);
-        logger.info(log);
+        System.out.printf("%n--- %s %s%s%n", crud, baseURI, uri);
         return client.target(baseURI + uri);
     }
 
@@ -103,7 +76,6 @@ public class DbmsClient {
     private void status(Response response) {
         int code = response.getStatus();
         String reason = response.getStatusInfo().getReasonPhrase();
-        String log = String.format("HTTP Status: %d %s", code, reason);
-        logger.info(log);
+        System.out.printf("Status: %d %s\t%s%n", code, reason, response.getHeaders());
     }
 }

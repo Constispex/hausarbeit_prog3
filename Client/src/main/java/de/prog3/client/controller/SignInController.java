@@ -10,9 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.json.JSONObject;
 
 import java.io.IOException;
+
 
 /**
  * Der Controller verwaltet die Eingabe von Username und Passwort.
@@ -49,12 +49,13 @@ public class SignInController {
             label_error.setText("please enter a name and a password");
             text_password.clear();
         } else {
-            User u = new User(username, password, false);
+            System.out.printf("Username: %s \t Password: %s%n", username, password);
+            setCurrentUser(new User(username, password, false));
             final String BASE_URI = "http://localhost:8080/rest";
 
             DbmsClient dbmsClient = new DbmsClient(BASE_URI);
 
-            Response response = dbmsClient.post("/register", u);
+            Response response = dbmsClient.validateUser(getCurrentUser(), "/register");
 
             switch (response.getStatus()) {
                 case 406 -> { // not Acceptable
@@ -68,10 +69,8 @@ public class SignInController {
                     Stage stage = (Stage) button_submit.getScene().getWindow();
                     stage.close();
 
-
-                    boolean isAdmin = response.readEntity(String.class).equals("true");
-
-                    setCurrentUser(new User(username, password, isAdmin));
+                    setCurrentUser(response.readEntity(User.class));
+                    System.out.println(getCurrentUser().toString());
 
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/overview.fxml"));
                     Scene secondScene;
@@ -86,6 +85,7 @@ public class SignInController {
                     mainWindow.setTitle("Logged in as " + username);
                     mainWindow.show();
                 }
+                case 415 -> label_error.setText("Unsupported Media Type");
                 default -> label_error.setText("Unexpected Response");
             }
         }

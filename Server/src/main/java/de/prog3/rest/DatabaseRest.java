@@ -1,5 +1,8 @@
 package de.prog3.rest;
 
+import de.prog3.common.Book;
+import de.prog3.common.Query;
+import de.prog3.common.QueryBuilder;
 import de.prog3.server.DbConnection;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -12,8 +15,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Die Klasse verarbeitet Client Anfragen, die auf die Adresse "sqlquery" geleitet werden
@@ -21,49 +24,54 @@ import java.util.Scanner;
 @Path("/sqlquery")
 public class DatabaseRest {
     private static final Logger logger = LogManager.getLogger(DatabaseRest.class);
+
     /**
-     * Die Methode wartet auf eine SQL Query und gibt das Ergebnis zurück. Zudem wird die Query in der Konsole ausgegeben
+     * Methode bekommt eine SQL Query, führte diese aus und schickt eine LinkedList mit den Büchern an den Client zurück
      *
-     * @param res die SQL Query
-     * @return die SQL Query bzw der Status
+     * @param query die Query, die ausgeführt werden soll
+     * @return Response mit dem Inhalt der Query Ergebnisse
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSqlQuery(String res) {
-        Scanner n = new Scanner(res);
-        String log = n.next() + " " + n.next();
-        n.close();
-        logger.debug("Query executed: {}", log);
-        ResultSet rs = DbConnection.execute(res);
-        if (!res.contains("SELECT")) return Response.ok().build();
+    public Response getSqlQuery(Query query) {
+        String sql = new QueryBuilder().createSql(query);
+        System.out.printf("[%s]: Query: %s%n", new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()), sql);
 
-        String result = DbConnection.rsToString(Objects.requireNonNull(rs), getColumns(res));
-        try {
-            rs.close();
-            return Response.ok(result).build();
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-            return Response.serverError().build();
+        if (query.isDelete() || query.isUpdate() || query.isInsertInto()) {
+            DbConnection.execute(sql);
+            return Response.ok().build();
         }
+        LinkedList<Book> books = DbConnection.getList(sql, getColumns(sql));
+
+        System.out.printf("[%s]: Sent %s books%n", new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()), books.size());
+        return Response.ok(books).build();
     }
 
     /**
-     * Zählt die Spalten
+     * Zählt die Spalten und gibt diese als Liste zurück
      *
-     * @param sql die Query, bei der die Spalten gezählt werden sollen
-     * @return die Anzahl der Spalten
+     * @param sql die Query, zum Ausgeben der Spalten
+     * @return eine Liste mit Spalten
      */
-    int getColumns(String sql) {
-        if (sql.contains("SELECT  * FROM")) return 5;
-        Scanner scanner = new Scanner(sql.toUpperCase());
-        int columns = 0;
+    public List<String> getColumns(String sql) {
+        List<String> cols = new ArrayList<>();
+        if (sql.contains("SELECT *  FROM")) {
+            cols.add("title");
+            cols.add("author");
+            cols.add("publisher");
+            cols.add("rating");
+            cols.add("subareas");
+            return cols;
+        }
+        Scanner scanner = new Scanner(sql.toLowerCase());
+
         scanner.next();
-        while (!scanner.hasNext("FROM")) {
-            scanner.next();
-            columns++;
+        while (!scanner.hasNext("from")) {
+            cols.add(scanner.next().replace(",", "").replace(" ", ""));
+
         }
         scanner.close();
-        return columns;
+        return cols;
     }
 }

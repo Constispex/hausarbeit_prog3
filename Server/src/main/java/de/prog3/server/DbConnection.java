@@ -1,5 +1,6 @@
 package de.prog3.server;
 
+import de.prog3.common.Book;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -55,12 +58,44 @@ public class DbConnection {
     }
 
     /**
+     * Führt die Query aus und erstellt aus dem erstellten ResultSet eine Liste mit den Büchern.
+     *
+     * @param sql     die auszuführende Query
+     * @param columns Liste mit Spalten
+     * @return Liste mit Büchern
+     */
+    public static LinkedList<Book> getList(String sql, List<String> columns) {
+        ResultSet resultSet = Objects.requireNonNull(execute(sql));
+        LinkedList<Book> books = new LinkedList<>();
+        try {
+            while (resultSet.next()) {
+                Book curr = new Book();
+                for (int i = 1; i <= columns.size(); i++) {
+                    switch (columns.get(i - 1)) {
+                        case "title" -> curr.setTitle(resultSet.getString(i));
+                        case "author" -> curr.setAuthor(resultSet.getString(i));
+                        case "publisher" -> curr.setPublisher(resultSet.getString(i));
+                        case "rating" -> curr.setRating(resultSet.getString(i));
+                        case "subareas" -> curr.setSubareas(resultSet.getString(i));
+                        default -> logger.debug(new RuntimeException("no cols found!"));
+                    }
+                }
+                books.add(curr);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("Error in Query {}", e.getMessage());
+        }
+        return books;
+    }
+
+    /**
      * Stellt die Verbindung mit einer bestimmten Datenbank her. Dafür wird der JDBC Treiber verwendet.
      *
      * @param database Die Datenbank, die verwendet wird
      * @return Datenbankverbindung
      */
-    public static java.sql.Connection getConnection(String database) throws NullPointerException{
+    public static java.sql.Connection getConnection(String database) {
         java.sql.Connection con = null;
         try {
             con = DriverManager.getConnection(
@@ -80,7 +115,7 @@ public class DbConnection {
      * @throws IOException  Falls der Scanner einen Fehler wirft
      */
     private static void createTable() throws SQLException, IOException {
-        String sql = "SHOW TABLES LIKE 'Buecher'";
+        String sql = "SHOW TABLES LIKE 'buecher'";
         ResultSet rs;
         try (Statement stIfExists = getConnection(CURR_DATABASE).createStatement()) {
             stIfExists.execute(sql);
@@ -95,7 +130,7 @@ public class DbConnection {
                     String next = scanner.nextLine();
                     if (next.contains(";")) {
                         query.append(next);
-                        logger.info("Query executed");
+                        logger.info("Query executed.");
                         logger.debug("Query: {}", query);
                         stCreateAndInsert.execute(query.toString());
                         query = new StringBuilder();
@@ -104,22 +139,6 @@ public class DbConnection {
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Erstellt die Database, falls diese nicht existiert.
-     *
-     * @throws SQLException Wirft eine Fehlermeldung, falls die Anfrage falsch ist, oder es einen Fehler mit der Datenbank gibt
-     */
-    private static void createDatabase() throws SQLException, NullPointerException {
-        Statement statement = null;
-        String sql = "CREATE DATABASE IF NOT EXISTS " + CURR_DATABASE;
-        try {
-            statement = getConnection("").createStatement();
-            statement.execute(sql);
-        } finally {
-            Objects.requireNonNull(statement).close();
         }
     }
 
@@ -142,9 +161,25 @@ public class DbConnection {
             }
 
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            System.err.println(e.getMessage());
         }
         return sb.toString();
+    }
+
+    /**
+     * Erstellt die Database, falls diese nicht existiert.
+     *
+     * @throws SQLException Wirft eine Fehlermeldung, falls die Anfrage falsch ist, oder es einen Fehler mit der Datenbank gibt
+     */
+    private static void createDatabase() throws SQLException, NullPointerException {
+        Statement statement = null;
+        String sql = "CREATE DATABASE IF NOT EXISTS " + CURR_DATABASE;
+        try {
+            statement = getConnection("").createStatement();
+            statement.execute(sql);
+        } finally {
+            Objects.requireNonNull(statement).close();
+        }
     }
 
     /**

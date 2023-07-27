@@ -18,8 +18,15 @@ import java.net.URISyntaxException;
  * Die Main Klasse startet den REST-Server und startet eine Überprüfung der Datenbankverbindung.
  * Mit Enter kann der Server wieder gestoppt werden.
  */
-public class Main {
-    private static final Logger logger = LogManager.getRootLogger();
+public class Server {
+    private static final Logger logger = LogManager.getLogger(Server.class);
+    /**
+     * Startet den Server und überprüft die Datenbankverbindung
+     *
+     * @param args keine
+     * @throws IOException        falls der Server nicht gestartet werden kann
+     * @throws URISyntaxException falls die URI nicht stimmt
+     */
     /**
      * Startet den Server und überprüft die Datenbankverbindung
      *

@@ -1,8 +1,10 @@
 package de.prog3.client.controller;
 
 import de.prog3.client.handler.DbmsClient;
-import de.prog3.client.model.Book;
 import de.prog3.client.model.BookHolder;
+import de.prog3.common.Book;
+import de.prog3.common.Query;
+import de.prog3.common.QueryBuilder;
 import jakarta.ws.rs.core.Response;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,12 +13,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
-
 
 /**
  * Die Klasse ist der Controller vom DBMS. Hier werden Methoden ausgeführt fürs Löschen und anzeigen der Datenbank.
@@ -56,35 +55,15 @@ public class OverViewController {
     @FXML
     public Button admin_add;
 
-    private static final Logger logger = LogManager.getLogger(OverViewController.class.getName());
     private static final List<String> selectedCols = new ArrayList<>();
     private final DbmsClient dbmsClient = new DbmsClient(BASE_URI);
     private StringBuilder select;
     private StringBuilder where;
     private StringBuilder orderBy;
     private static final String SERVER_ADDRESS = "/sqlquery";
+    private final QueryBuilder queryBuilder = new QueryBuilder();
 
-    /**
-     * Erstellt ein Buch mit den Inhalten der Spalten
-     *
-     * @param column aktuelle Buch
-     * @return das erstellte Buch
-     */
-    private static Book setBookData(String[] column) {
-        Book b = new Book();
-        for (int i = 0; i < selectedCols.size(); i++) {
-            String col = selectedCols.get(i);
-            switch (col) {
-                case "title" -> b.setTitle(column[i]);
-                case "author" -> b.setAuthor(column[i]);
-                case "publisher" -> b.setPublisher(column[i]);
-                case "rating" -> b.setRating(column[i]);
-                case "subareas" -> b.setSubareas(column[i]);
-                default -> logger.error("no columns detected");
-            }
-        }
-        return b;
-    }
+
 
     /**
      * Überprüft beim Aufrufen der Seite, ob der Nutzer Admin ist.
@@ -105,7 +84,7 @@ public class OverViewController {
         try {
             logInScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            System.err.println(e.getMessage());
         }
         Stage logInWindow = new Stage();
         logInWindow.setScene(logInScene);
@@ -116,9 +95,11 @@ public class OverViewController {
     /**
      * Checkt, wonach sortiert werden soll. Die Methode besitzt ein Set mit allen Sortiermöglichkeiten.
      * Falls davor kein Filter gesetzt worden ist, wird die Query dennoch ausgeführt.
+     *
      * @param actionEvent beinhaltet den Wert, was sortiert werden soll
      */
     public void setSortyBy(ActionEvent actionEvent) {
+        orderBy = new StringBuilder();
         Queue<String> sorts = new LinkedList<>();
         sorts.add("Title");
         sorts.add("Author");
@@ -129,18 +110,20 @@ public class OverViewController {
         if (where == null) where = new StringBuilder();
         if (select == null) select = new StringBuilder("SELECT ");
         String actionTarget = actionEvent.getTarget().toString();
-        orderBy = new StringBuilder(" ORDER BY ");
-        for (String s: sorts
+        orderBy = new StringBuilder();
+        for (String s : sorts
         ) {
-            if (actionTarget.contains(s.toLowerCase())){
+            if (actionTarget.contains(s.toLowerCase())) {
                 orderBy.append(s);
-                Response response = dbmsClient.post(SERVER_ADDRESS, select, where, orderBy);
+                Response response = dbmsClient.postQuery(queryBuilder.buildSelect(select.toString(), "buecher ", where.toString(), orderBy.toString()), SERVER_ADDRESS);
                 label_error.setText(String.valueOf(response.getStatusInfo()));
-                String table = response.readEntity(String.class);
+                LinkedList<LinkedHashMap<String, String>> table = response.readEntity(LinkedList.class);
                 setResultTable(table);
+                System.out.println(table);
                 label_error.setText(response.getStatus() == 100 ?
                         response.getStatusInfo().getReasonPhrase() : String.valueOf(response.getStatusInfo()));
                 orderBy = new StringBuilder();
+                response.close();
                 break;
             }
         }
@@ -150,9 +133,9 @@ public class OverViewController {
      * Erstellt eine Abfrage aus den ausgewählten Kriterien. Sendet dann die Anfrage an den Server
      */
     public void submit() {
-        where = new StringBuilder("WHERE ");
-        select = new StringBuilder("SELECT ");
-        String a = " AND ";
+        select = new StringBuilder();
+        where = new StringBuilder();
+        Query query;
         selectedCols.clear();
 
         // Select Block
@@ -179,11 +162,14 @@ public class OverViewController {
             ) {
                 selectedCols.add(cb.getId().replace("check_", ""));
             }
+
         }
 
-        // löscht ", " nach der letzten Spalte
-        if (!select.toString().equals("SELECT ")) {
+        // löscht ", "nach der letzten Spalte
+        if (!select.isEmpty()) {
             select.delete(select.length() - 2, select.length());
+        } else {
+            select.append("* ");
         }
 
         // Where Block
@@ -196,41 +182,36 @@ public class OverViewController {
         int countWhere = 0;
         for (TextField t : textFields) {
             if (!t.getText().isBlank()) {
-                if (countWhere > 0) where.append(a);
+                if (countWhere > 0) where.append(" AND ");
                 where
                         .append(t.getId().replace("text_", ""))
-                        .append(" LIKE\"%")
+                        .append(" LIKE \"%")
                         .append(t.getText())
                         .append("%\"");
                 countWhere++;
             }
         }
-        if (countWhere > 0) where.append(a);
+        if (countWhere > 0) where.append(" AND ");
         where.append("Rating >=\"").append(slider_rating.getValue()).append("\"");
+        if (orderBy == null) orderBy = new StringBuilder();
 
-        // clears where part if its empty
-        if (where.toString().equals("WHERE ")) where.replace(0, where.length(), "");
-
-        Response response = dbmsClient.post(SERVER_ADDRESS, select, where, orderBy);
-
-        String table = response.readEntity(String.class);
-        setResultTable(table);
-
+        query = queryBuilder.buildSelect(select.toString(), "buecher", where.toString(), orderBy.toString());
+        Response response = dbmsClient.postQuery(query, SERVER_ADDRESS);
         label_error.setText(String.valueOf(response.getStatusInfo()));
 
+        LinkedList<LinkedHashMap<String, String>> objList = response.readEntity(LinkedList.class);
+        setResultTable(objList);
+        response.close();
     }
+
 
     /**
      * Erstellt ein String-Array (Zeilen) mit String-Arrays (Spalten).
      * Danach erstellt die Methode die ausgewählten Spalten und füllt die Tabelle mit Zeilen
      *
-     * @param result Query, die vom Server gesendet wurde
+     * @param sqlResult Query, die vom Server gesendet wurde
      */
-    public void setResultTable(String result) {
-        String[] rows = result.split("// ");
-        String[] cols = rows[0].split("; ");
-        int anzahlZeilen = rows.length;
-        int anzahlSpalten = cols.length;
+    public void setResultTable(LinkedList<LinkedHashMap<String, String>> sqlResult) {
 
         table_result.getColumns().clear();
         table_result.getItems().clear();
@@ -242,21 +223,19 @@ public class OverViewController {
             table_result.getColumns().add(curr);
         }
 
-        // create table array
-        String[][] table = new String[anzahlZeilen][anzahlSpalten];
-        for (int i = 0; i < anzahlZeilen; i++) {
-            String[] currCols = rows[i].split("; ");
-            System.arraycopy(currCols, 0, table[i], 0, anzahlSpalten);
-        }
-
-        for (String[] column : table
-        ) {
-            try {
-                Book b = setBookData(column);
-                table_result.getItems().add(b);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                e.addSuppressed(new ArrayIndexOutOfBoundsException());
+        for (LinkedHashMap<String, String> map : sqlResult) {// o -> Zeile
+            Book book = new Book();
+            for (String s : map.keySet()) {
+                switch (s) {
+                    case "title" -> book.setTitle(map.get(s));
+                    case "author" -> book.setAuthor(map.get(s));
+                    case "publisher" -> book.setPublisher(map.get(s));
+                    case "rating" -> book.setRating(map.get(s));
+                    case "subareas" -> book.setSubareas(map.get(s));
+                    default -> System.err.println("no cols found!");
+                }
             }
+            table_result.getItems().add(book);
         }
     }
 
@@ -273,7 +252,7 @@ public class OverViewController {
         try {
             editBookScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            System.err.println(e.getMessage());
         }
         Stage editBookStage = new Stage();
         editBookStage.setScene(editBookScene);
@@ -291,9 +270,10 @@ public class OverViewController {
     public void deleteBook() {
         Book b = getCurrBook();
         if (b != null) {
-            String sql = "DELETE FROM buecher WHERE Title = \"" + b.getTitle() + "\"";
-            Response response = dbmsClient.post(SERVER_ADDRESS, sql);
+            Query q = queryBuilder.buildDelete(b);
+            Response response = dbmsClient.postQuery(q, SERVER_ADDRESS);
             label_error.setText(response.getStatusInfo().toString());
+            response.close();
             submit();
         }
         tableClicked();
@@ -320,6 +300,7 @@ public class OverViewController {
 
     /**
      * Setzt das ausgewählte Buch
+     *
      * @return das ausgewählte Buch, wenn keins ausgewählt ist → return null
      */
     public Book getCurrBook() {
@@ -335,7 +316,7 @@ public class OverViewController {
         try {
             logInScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            System.err.println(e.getMessage());
         }
         Stage logInWindow = new Stage();
         logInWindow.setScene(logInScene);
