@@ -20,13 +20,7 @@ import java.net.URISyntaxException;
  */
 public class Server {
     private static final Logger logger = LogManager.getRootLogger();
-    /**
-     * Startet den Server und überprüft die Datenbankverbindung
-     *
-     * @param args keine
-     * @throws IOException        falls der Server nicht gestartet werden kann
-     * @throws URISyntaxException falls die URI nicht stimmt
-     */
+
     /**
      * Startet den Server und überprüft die Datenbankverbindung
      *
@@ -55,12 +49,14 @@ public class Server {
             logger.fatal("Server shut down - Database set up failed");
             server.shutdown();
         }
-        if (!server.isStarted()) server.start();
+        if (!server.isStarted()) {
+            server.start();
+            logger.info("Enter stops the server");
+            System.in.read();
+            logger.info("Server stopped");
+            server.shutdownNow();
+        }
 
-        logger.info("Enter stops the server");
-        System.in.read();
-        logger.info("Server stopped");
-        server.shutdownNow();
 
     }
 }

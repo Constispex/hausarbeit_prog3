@@ -1,4 +1,4 @@
-create table IF NOT EXISTS Buecher
+create table IF NOT EXISTS buecher
 (
     Title     varchar(150) not null,
     Author    varchar(600) null,

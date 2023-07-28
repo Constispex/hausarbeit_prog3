@@ -20,6 +20,7 @@ import java.util.*;
 /**
  * Die Klasse ist der Controller vom DBMS. Hier werden Methoden ausgeführt fürs Löschen und anzeigen der Datenbank.
  */
+@SuppressWarnings("unchecked")
 public class OverViewController {
     private static final String BASE_URI = "http://localhost:8080/rest";
     @FXML

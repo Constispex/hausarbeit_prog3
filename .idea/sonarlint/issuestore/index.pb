@@ -1,11 +1,25 @@
 
-w
-G.idea/sonarlint/issuestore/5/b/5bbfa66edb4db3c7c33c5181f43510990d3307f9,f\7\f7819ea138c33fec28e7e536cb2de34db38fc121
-w
-G.idea/sonarlint/issuestore/2/a/2a45a911a8f1836b0b6c5b758962572012d8f8c3,9\a\9aed88f31eac276604c6355c1adcc0bce1f80fd6
-w
-G.idea/sonarlint/issuestore/f/b/fbe448ebfc3eb2d4e308f6b8b043666f5b57235e,5\2\52114fdaa426e9b83a3c5df4e11c4f0ebbcd814b
-w
-G.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,e\d\ed67eb178d523a4b3f117dcbe0eda5196367ceec
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
+^
+.Common/src/main/java/de/prog3/common/Book.java,0\5\050b9d3061b5ce7543515dd0ba944f0f0db07829
+C
+Common/build.gradle,7\f\7fde9ddc0230cc344cbe0875a8a1fb4e1fabb0da
+C
+Client/build.gradle,5\e\5e22195d533035367bb8e02341b5f474f57c18b6
+C
+Server/build.gradle,5\1\517b060a70b251df04ba6cb5d7f55bfb6be1b7a2
+m
+=Server/src/main/java/de/prog3/server/DataBaseApplication.java,c\9\c98decbb1b172998dac5fb897d0f9dc7308b0078
+\
+,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
+f
+6Server/src/main/java/de/prog3/server/DbConnection.java,a\8\a842a7956f00081813ce4d493caca3c9480b174f
+v
+FClient/src/main/java/de/prog3/client/controller/AddBookController.java,3\3\33dfaa4f829a8e743d789966f5e4df5907595128
+d
+4Server/src/main/java/de/prog3/rest/DatabaseRest.java,d\6\d66740616e9204aef71377ab3776f6bb47dc9a4c
+w
+GClient/src/main/java/de/prog3/client/controller/EditBookController.java,7\5\750516f9b7bc5fda7228467d00d836eb29d3a90b
+`
+0Server/src/main/java/de/prog3/rest/UserRest.java,2\6\2687017b668c03dd8b94c96e759fc48034921973
