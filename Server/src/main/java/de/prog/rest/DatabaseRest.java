@@ -1,9 +1,9 @@
-package de.prog3.rest;
+package de.prog.rest;
 
-import de.prog3.common.Book;
-import de.prog3.common.Query;
-import de.prog3.common.QueryBuilder;
-import de.prog3.server.DbConnection;
+import de.prog.common.Book;
+import de.prog.common.Query;
+import de.prog.common.QueryBuilder;
+import de.prog.server.DbConnection;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

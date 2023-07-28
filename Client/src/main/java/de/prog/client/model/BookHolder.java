@@ -1,6 +1,6 @@
-package de.prog3.client.model;
+package de.prog.client.model;
 
-import de.prog3.common.Book;
+import de.prog.common.Book;
 
 /**
  * Singleton fürs Speichern eines ausgewählten Buches.

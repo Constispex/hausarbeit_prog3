@@ -1,4 +1,4 @@
-package de.prog3.common;
+package de.prog.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

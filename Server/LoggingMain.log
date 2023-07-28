@@ -1,0 +1,27 @@
+2023-07-28 16:07:28 INFO  :28 - Nutzer-Info
+2023-07-28 16:07:28 DEBUG :29 - Nutzer-Debug
+2023-07-28 16:07:28 WARN  :30 - Nutzer-Warnung
+2023-07-28 16:07:28 ERROR :31 - Nutzer-Fehler
+2023-07-28 16:07:28 FATAL :32 - Nutzer-Fatal
+2023-07-28 16:07:29 INFO  :47 - Database set up completed
+2023-07-28 16:08:07 INFO  :28 - Nutzer-Info
+2023-07-28 16:08:07 DEBUG :29 - Nutzer-Debug
+2023-07-28 16:08:07 WARN  :30 - Nutzer-Warnung
+2023-07-28 16:08:07 ERROR :31 - Nutzer-Fehler
+2023-07-28 16:08:07 FATAL :32 - Nutzer-Fatal
+2023-07-28 16:08:08 INFO  :47 - Database set up completed
+2023-07-28 16:09:52 INFO  :51 - User admin logged in
+2023-07-28 16:16:29 INFO  :51 - User admin logged in
+2023-07-28 16:17:19 INFO  :51 - User admin logged in
+2023-07-28 16:17:58 INFO  :51 - User admin logged in
+2023-07-28 16:22:43 INFO  :51 - User admin logged in
+2023-07-28 16:23:20 INFO  :28 - Nutzer-Info
+2023-07-28 16:23:20 DEBUG :29 - Nutzer-Debug
+2023-07-28 16:23:20 WARN  :30 - Nutzer-Warnung
+2023-07-28 16:23:20 ERROR :31 - Nutzer-Fehler
+2023-07-28 16:23:20 FATAL :32 - Nutzer-Fatal
+2023-07-28 16:23:20 INFO  :47 - Database set up completed
+2023-07-28 16:24:41 INFO  :28 - Server wird gestartet
+2023-07-28 16:24:41 INFO  :29 - Logger Level: DEBUG
+2023-07-28 16:24:42 INFO  :47 - Database set up completed
+2023-07-28 16:24:56 INFO  :51 - User admin logged in

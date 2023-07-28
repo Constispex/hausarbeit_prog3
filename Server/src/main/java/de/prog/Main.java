@@ -1,6 +1,6 @@
-package de.prog3;
+package de.prog;
 
-import de.prog3.server.Server;
+import de.prog.server.Server;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,12 +25,8 @@ public class Main {
 
         context.start();
 
-        logger.info("Nutzer-Info");
-        logger.debug("Nutzer-Debug");
-        logger.warn("Nutzer-Warnung");
-        logger.error("Nutzer-Fehler");
-        logger.fatal("Nutzer-Fatal");
-
+        logger.info("Server wird gestartet");
+        logger.info("Logger Level: {}", LOGLEVEL);
         try {
             Server.main(args);
         } catch (IOException | URISyntaxException e) {

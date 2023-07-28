@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="438.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/18"
-      fx:controller="de.prog3.client.controller.EditBookController">
+      fx:controller="de.prog.client.controller.EditBookController">
     <Pane nodeOrientation="LEFT_TO_RIGHT" pickOnBounds="false" prefHeight="366.0" prefWidth="360.0"
           style="-fx-border-color: black; -fx-background-color: lightgray;" VBox.vgrow="NEVER">
         <VBox.margin>

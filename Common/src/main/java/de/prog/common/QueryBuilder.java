@@ -1,4 +1,4 @@
-package de.prog3.common;
+package de.prog.common;
 
 /**
  * Die Klasse erstellt Querys aus Büchern oder Strings.

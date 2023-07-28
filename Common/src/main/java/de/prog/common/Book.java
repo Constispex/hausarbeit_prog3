@@ -1,4 +1,4 @@
-package de.prog3.common;
+package de.prog.common;
 
 /**
  * Die Buchklasse speichert alle wichtigen Informationen zu einem Buch. So können die Daten des Servers beim Client

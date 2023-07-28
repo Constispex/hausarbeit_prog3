@@ -1,4 +1,4 @@
-module de.prog3.client {
+module de.prog.client {
     requires jakarta.ws.rs;
     requires jakarta.activation;
     requires jakarta.annotation;
@@ -19,11 +19,11 @@ module de.prog3.client {
 
     requires com.fasterxml.jackson.databind;
 
-    opens de.prog3.client.controller to javafx.fxml;
-    opens de.prog3.client.application to javafx.fxml;
+    opens de.prog.client.controller to javafx.fxml;
+    opens de.prog.client.application to javafx.fxml;
 
-    exports de.prog3.client.application;
-    exports de.prog3.client.controller;
-    exports de.prog3.client.handler;
-    exports de.prog3.client.model;
+    exports de.prog.client.application;
+    exports de.prog.client.controller;
+    exports de.prog.client.handler;
+    exports de.prog.client.model;
 }

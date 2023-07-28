@@ -1,6 +1,6 @@
-package de.prog3.server;
+package de.prog.server;
 
-import de.prog3.common.Book;
+import de.prog.common.Book;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

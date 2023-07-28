@@ -11,7 +11,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'application'
 
-    group 'de.prog3'
+    group 'de.prog'
     version '1.0-SNAPSHOT'
 
     sourceCompatibility = '15'

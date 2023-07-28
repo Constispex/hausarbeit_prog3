@@ -1,4 +1,4 @@
-package de.prog3.client.application;
+package de.prog.client.application;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

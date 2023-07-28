@@ -11,7 +11,7 @@ jar {
 }
 
 ext {
-    log4jVersion = '2.20.0'
+    log4jVersion = '2.17.2'
     jacksonVersion = '2.14.2'
 
 }

@@ -1,10 +1,10 @@
-package de.prog3.client.controller;
+package de.prog.client.controller;
 
-import de.prog3.client.handler.DbmsClient;
-import de.prog3.client.model.BookHolder;
-import de.prog3.common.Book;
-import de.prog3.common.Query;
-import de.prog3.common.QueryBuilder;
+import de.prog.client.handler.DbmsClient;
+import de.prog.client.model.BookHolder;
+import de.prog.common.Book;
+import de.prog.common.Query;
+import de.prog.common.QueryBuilder;
 import jakarta.ws.rs.core.Response;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

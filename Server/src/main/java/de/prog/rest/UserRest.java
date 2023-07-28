@@ -1,7 +1,7 @@
-package de.prog3.rest;
+package de.prog.rest;
 
 
-import de.prog3.common.User;
+import de.prog.common.User;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

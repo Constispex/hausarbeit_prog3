@@ -1,14 +1,6 @@
 
-<
-build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 ^
 .Common/src/main/java/de/prog3/common/Book.java,0\5\050b9d3061b5ce7543515dd0ba944f0f0db07829
-C
-Common/build.gradle,7\f\7fde9ddc0230cc344cbe0875a8a1fb4e1fabb0da
-C
-Client/build.gradle,5\e\5e22195d533035367bb8e02341b5f474f57c18b6
-C
-Server/build.gradle,5\1\517b060a70b251df04ba6cb5d7f55bfb6be1b7a2
 m
 =Server/src/main/java/de/prog3/server/DataBaseApplication.java,c\9\c98decbb1b172998dac5fb897d0f9dc7308b0078
 \
@@ -23,3 +15,7 @@ w
 GClient/src/main/java/de/prog3/client/controller/EditBookController.java,7\5\750516f9b7bc5fda7228467d00d836eb29d3a90b
 `
 0Server/src/main/java/de/prog3/rest/UserRest.java,2\6\2687017b668c03dd8b94c96e759fc48034921973
+I
+Server/sql/Informatik.sql,d\7\d710933d2e1a82d3204e61697b8be50c3da70d42
+w
+GClient/src/main/java/de/prog3/client/controller/OverViewController.java,2\d\2d7fbfe082dcf767725612d3138fe02b3ba06242

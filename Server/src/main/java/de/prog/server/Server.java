@@ -1,4 +1,4 @@
-package de.prog3.server;
+package de.prog.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

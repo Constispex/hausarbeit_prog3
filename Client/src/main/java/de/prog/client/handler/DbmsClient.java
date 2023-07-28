@@ -1,7 +1,7 @@
-package de.prog3.client.handler;
+package de.prog.client.handler;
 
-import de.prog3.common.Query;
-import de.prog3.common.User;
+import de.prog.common.Query;
+import de.prog.common.User;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
