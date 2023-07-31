@@ -1,17 +1,42 @@
-version: '3.7'
+version: '3.8'
 
 services:
-  app:
+  server:
+    restart: on-failure
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - .:/app
+    depends_on:
+      - db
+      - apache
+
+  db:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: no
     environment:
-      - DB_DATABASE=Informatik
-      - DB_USERNAME=root
-      - DB_PASSWORD=""
-      - DB_HOST=db
-      - DB_PORT=3306
+      MYSQL_EMPTY_ROOT_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
+
+      MARIADB_EMPTY_ROOT_PASSWORD: "yes"
+      MARIADB_ROOT_PASSWORD: ""
+      MARIADB_DATABASE: "Informatik"
+      servername: localhost
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./Server/sql:/docker-entrypoint-initdb.d
+      - ./Server/sql:/var/lib/mysql
+
+  apache:
+    image: httpd:latest
+    container_name: apache
+    environment:
+      servername: localhost
+    restart: no
+    ports:
+      - "8080:8080"
+
+

@@ -1,16 +1,10 @@
 
 \
 ,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
-I
-Server/sql/Informatik.sql,d\7\d710933d2e1a82d3204e61697b8be50c3da70d42
 F
 Server/LoggingMain.log,5\9\5905ecfda3768bac020731bc84335cfaca347b78
 ]
 -Common/src/main/java/de/prog/common/Book.java,9\8\98bb2c32ca64c4014a94f0eec4ebf13a888bfaf3
-^
-.Common/src/main/java/de/prog/common/Query.java,f\c\fc86aa58dfd4a929db4356478a6338c90db82a57
-e
-5Common/src/main/java/de/prog/common/QueryBuilder.java,9\c\9c40d875fbad229343e4ce3604eaf45052efb65e
 v
 FClient/src/main/java/de/prog/client/controller/EditBookController.java,5\5\552b4df4c1014472be6f41a56f8a184c9326edd5
 v

@@ -4,16 +4,24 @@ application {
 
 }
 
-jar {
+
+task fatJar(type: Jar) {
     manifest {
         attributes(
-                'Main-Class': { group }
+                'Main-Class': application.mainClass
+
         )
+
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from sourceSets.main.output
+
     from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.getFiles().collect { it.isDirectory() ? it : zipTree(it) }
     }
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    archiveFileName.set('Server-1.0.jar')
 }
 
 

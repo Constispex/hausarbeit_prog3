@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -98,10 +99,12 @@ public class DbConnection {
     public static java.sql.Connection getConnection(String database) {
         java.sql.Connection con = null;
         try {
+            DriverManager.setLogWriter(new PrintWriter(System.out));
             con = DriverManager.getConnection(
                     "jdbc:mariadb://localhost:3306/" + database, "root", "");
+
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            logger.error("Error while connecting to Database: {}", e.getMessage());
         }
         Objects.requireNonNull(con);
 

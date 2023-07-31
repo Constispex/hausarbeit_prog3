@@ -76,3 +76,5 @@
 2023-07-31 12:56:57 ERROR :51 - java.net.ConnectException: Connection refused: connect
 2023-07-31 13:41:49 DEBUG :76 - Client: POST /register
 2023-07-31 13:41:49 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 13:49:28 DEBUG :76 - Client: POST /register
+2023-07-31 13:49:29 ERROR :51 - java.net.ConnectException: Connection refused: connect

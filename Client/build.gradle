@@ -43,7 +43,6 @@ task fatJar(type: Jar) {
         configurations.runtimeClasspath.getFiles().collect { it.isDirectory() ? it : zipTree(it) }
     }
 
-
     archiveFileName.set('Client-1.0.jar')
 }
 
