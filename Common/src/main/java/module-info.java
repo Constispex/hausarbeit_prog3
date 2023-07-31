@@ -1,4 +1,4 @@
-module hausarbeit.prog3.Common.main {
+module de.prog.common {
     requires com.fasterxml.jackson.annotation;
 
     exports de.prog.common;

@@ -1,5 +1,6 @@
 package de.prog.common;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -41,6 +42,7 @@ public class User {
         return name;
     }
 
+    @JsonGetter("password")
     public String getPassword() {
         return password;
     }

@@ -2,6 +2,7 @@ package de.prog.client.handler;
 
 import de.prog.common.Query;
 import de.prog.common.User;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -42,10 +43,15 @@ public class DbmsClient {
         WebTarget target = getTarget(uri);
 
         Entity<User> list = Entity.entity(user, MediaType.APPLICATION_JSON);
-        Response response = target.request().post(list);
+        try {
+            Response response = target.request().post(list);
+            status("POST User", response);
+            return response;
+        } catch (ProcessingException e) {
+            logger.error(e.getMessage());
+            return Response.serverError().tag(e.getMessage()).build();
 
-        status("POST User", response);
-        return response;
+        }
     }
 
     /**

@@ -2,7 +2,7 @@ group 'de.prog'
 version '1.0-SNAPSHOT'
 
 dependencies {
-    implementation "org.json:json:20220320"
+    implementation 'org.json:json:20230227'
     implementation "com.fasterxml.jackson.core:jackson-core:2.14.2"
     implementation group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: '2.14.1'
     implementation 'com.google.code.gson:gson:2.10.1'

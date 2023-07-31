@@ -1,40 +1,78 @@
-2023-07-28 16:09:52 DEBUG :70 - Client: POST /register
-2023-07-28 16:09:52 DEBUG :82 - Status: POST User 200 OK
-2023-07-28 16:09:56 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:09:56 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:10:14 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:10:14 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:10:16 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:10:16 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:16:29 DEBUG :70 - Client: POST /register
-2023-07-28 16:16:29 DEBUG :82 - Status: POST User 200 OK
-2023-07-28 16:16:31 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:16:31 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:17:19 DEBUG :70 - Client: POST /register
-2023-07-28 16:17:19 DEBUG :82 - Status: POST User 200 OK
-2023-07-28 16:17:20 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:17:20 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:17:24 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:17:24 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:17:25 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:17:25 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:17:58 DEBUG :70 - Client: POST /register
-2023-07-28 16:17:58 DEBUG :82 - Status: POST User 200 OK
-2023-07-28 16:17:59 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:17:59 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:22:43 DEBUG :70 - Client: POST /register
-2023-07-28 16:22:43 DEBUG :82 - Status: POST User 200 OK
-2023-07-28 16:22:48 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:22:48 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:23:01 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:23:01 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:23:04 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:23:04 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:24:56 DEBUG :70 - Client: POST /register
-2023-07-28 16:24:56 DEBUG :82 - Status: POST User 200 OK
-2023-07-28 16:24:59 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:24:59 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:25:10 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:25:10 DEBUG :82 - Status: POST Query 200 OK
-2023-07-28 16:25:12 DEBUG :70 - Client: POST /sqlquery
-2023-07-28 16:25:12 DEBUG :82 - Status: POST Query 200 OK
+2023-07-31 00:22:21 DEBUG :77 - Client: POST /register
+2023-07-31 00:22:22 ERROR :51 - MessageBodyWriter not found for media type=application/json, type=class de.prog.common.User, genericType=class de.prog.common.User.
+2023-07-31 00:25:32 DEBUG :77 - Client: POST /register
+2023-07-31 00:25:32 ERROR :51 - MessageBodyWriter not found for media type=application/json, type=class de.prog.common.User, genericType=class de.prog.common.User.
+2023-07-31 00:26:06 DEBUG :77 - Client: POST /register
+2023-07-31 00:26:06 ERROR :51 - MessageBodyWriter not found for media type=application/json, type=class de.prog.common.User, genericType=class de.prog.common.User.
+2023-07-31 00:26:27 DEBUG :77 - Client: POST /register
+2023-07-31 00:26:27 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:26:30 DEBUG :77 - Client: POST /register
+2023-07-31 00:26:30 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:28:35 DEBUG :77 - Client: POST /register
+2023-07-31 00:28:35 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:28:36 DEBUG :77 - Client: POST /register
+2023-07-31 00:28:36 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:30:44 DEBUG :77 - Client: POST /register
+2023-07-31 00:30:45 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:31:07 DEBUG :77 - Client: POST /register
+2023-07-31 00:31:07 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:31:56 DEBUG :77 - Client: POST /register
+2023-07-31 00:31:57 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:32:33 DEBUG :77 - Client: POST /register
+2023-07-31 00:32:34 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:32:49 DEBUG :77 - Client: POST /register
+2023-07-31 00:32:49 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:33:48 DEBUG :77 - Client: POST /register
+2023-07-31 00:33:48 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:35:07 DEBUG :77 - Client: POST /register
+2023-07-31 00:35:07 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:35:21 DEBUG :77 - Client: POST /register
+2023-07-31 00:35:21 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:37:27 DEBUG :77 - Client: POST /register
+2023-07-31 00:37:27 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:37:33 DEBUG :77 - Client: POST /register
+2023-07-31 00:37:33 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:37:54 DEBUG :77 - Client: POST /register
+2023-07-31 00:37:54 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:38:17 DEBUG :77 - Client: POST /register
+2023-07-31 00:38:18 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:38:35 DEBUG :77 - Client: POST /register
+2023-07-31 00:38:36 ERROR :51 - Error accessing getter 'getPassword' declared in 'class de.prog.common.User'
+2023-07-31 00:39:28 DEBUG :77 - Client: POST /register
+2023-07-31 00:39:28 DEBUG :89 - Status: POST User 200 OK
+2023-07-31 00:39:30 DEBUG :77 - Client: POST /sqlquery
+2023-07-31 00:39:30 DEBUG :89 - Status: POST Query 200 OK
+2023-07-31 00:46:34 DEBUG :77 - Client: POST /register
+2023-07-31 00:46:34 DEBUG :89 - Status: POST User 200 OK
+2023-07-31 00:46:35 DEBUG :77 - Client: POST /sqlquery
+2023-07-31 00:46:35 DEBUG :89 - Status: POST Query 200 OK
+2023-07-31 01:26:47 DEBUG :76 - Client: POST /register
+2023-07-31 01:26:48 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:09:15 DEBUG :76 - Client: POST /register
+2023-07-31 11:09:15 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:11:10 DEBUG :76 - Client: POST /register
+2023-07-31 11:11:10 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:11:11 DEBUG :76 - Client: POST /register
+2023-07-31 11:11:11 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:11:11 DEBUG :76 - Client: POST /register
+2023-07-31 11:11:11 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:11:11 DEBUG :76 - Client: POST /register
+2023-07-31 11:11:11 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:11:11 DEBUG :76 - Client: POST /register
+2023-07-31 11:11:11 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:11:11 DEBUG :76 - Client: POST /register
+2023-07-31 11:11:11 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:11:11 DEBUG :76 - Client: POST /register
+2023-07-31 11:11:11 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:26:58 DEBUG :76 - Client: POST /register
+2023-07-31 11:26:58 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:26:58 DEBUG :76 - Client: POST /register
+2023-07-31 11:26:58 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 11:26:58 DEBUG :76 - Client: POST /register
+2023-07-31 11:26:58 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 12:02:50 DEBUG :76 - Client: POST /register
+2023-07-31 12:02:50 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 12:56:57 DEBUG :76 - Client: POST /register
+2023-07-31 12:56:57 ERROR :51 - java.net.ConnectException: Connection refused: connect
+2023-07-31 13:41:49 DEBUG :76 - Client: POST /register
+2023-07-31 13:41:49 ERROR :51 - java.net.ConnectException: Connection refused: connect

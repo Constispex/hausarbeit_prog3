@@ -1,11 +1,12 @@
 FROM amazoncorretto:17-alpine-jdk
 
-COPY target/Server-0.0.1-SNAPSHOT.jar /app.jar
+WORKDIR /app
 
-CMD ["java", "-jar", "/app.jar"]
+COPY Server/build/libs/Server-1.0-SNAPSHOT.jar .
+COPY Server/src/main/resources/ /app/resources/
+
+COPY Common/build/libs/Common-1.0-SNAPSHOT.jar .
 
 EXPOSE 8080
 
-# Path: docker-compose.yml
-version: '3.8'
-
+CMD ["java", "-jar", "Server-1.0-SNAPSHOT.jar"]

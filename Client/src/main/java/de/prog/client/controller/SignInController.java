@@ -41,6 +41,7 @@ public class SignInController {
      * Wenn die Eingaben korrekt sind, öffnet sich das Hauptfenster
      */
     public void submit() {
+
         String username = this.text_username.getText();
         String password = this.text_password.getText();
 
@@ -84,8 +85,9 @@ public class SignInController {
                     mainWindow.setTitle("Logged in as " + username);
                     mainWindow.show();
                 }
-                case 415 -> label_error.setText("Unsupported Media Type");
-                default -> label_error.setText("Unexpected Response");
+                case 503 -> label_error.setText("Server Offline"); // Server not reachable
+                case 415 -> label_error.setText("Unsupported Media Type"); // something wrong with JSON
+                default -> label_error.setText(Response.Status.fromStatusCode(response.getStatus()).getReasonPhrase());
             }
         }
     }
